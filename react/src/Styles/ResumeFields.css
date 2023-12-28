@@ -1,0 +1,161 @@
+.flex{
+    display: flex;
+}
+
+.white-background{
+    background-color: rgb(255, 255, 255);
+}
+
+.fields-wrapper{
+    width: 100%;
+
+    flex-direction: column;
+
+    gap: 30px;
+}
+
+.personal-details-wrapper{
+    flex-direction: column;
+
+    padding: 15px 25px 25px;
+}
+
+.personal-details-form{
+    flex-direction: column;
+}
+
+label{
+    margin-top: 15px;
+    margin-bottom: 2px;
+}
+
+.recommended{
+    font-size: 12px;
+    color: rgba(128, 128, 128, 0.83);
+
+    margin-left: 6px;
+}
+
+input{
+    border: none;
+    border-radius: 10px;
+    
+    background-color: rgb(245, 245, 245);
+
+    height: 35px;
+
+    padding-left: 12px;
+}
+
+.experience-header-div {
+    flex-direction: column;
+}
+
+.header-wrapper{
+    padding: 15px 25px 0 25px;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left-side-wrapper{
+    gap: 15px;
+
+    align-items: center;
+}
+
+.form-wrapper{
+    flex-direction: column;
+
+    padding: 0 25px;
+}
+
+.field-wrapper{
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.date-wrapper{
+    gap: 30px;
+}
+
+textarea{
+    height: 75px;
+}
+
+.form-action-buttons-container{
+    margin: 30px 0 15px 0 ;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.delete-form-button{
+    width: 100px;
+}
+
+.delete-form-button,
+.cancelBtn,
+.saveBtn{
+    height: 35px;
+
+    border-radius: 0;
+    border: 1px solid rgb(108, 108, 108);
+
+    background-color: white;
+}
+
+.delete-and-save-div{
+    gap: 15px;
+}
+
+.cancelBtn,
+.saveBtn{
+    width: 70px;
+}
+
+.saveBtn{
+    color: white;
+    background-color: #187ff5;
+
+    font-weight: 1000;    
+
+    border: none;
+}
+
+.experience-card{
+    padding: 15px 30px;
+
+    margin: 5px 0;
+}
+
+.add-container{
+    padding: 15px;
+
+    justify-content: center;
+
+    max-width: 100%;
+
+    border-bottom-right-radius: 18px;
+    border-bottom-left-radius: 18px;
+}
+
+.add-button{
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    height: 40px;
+    width: 125px;
+
+    padding: 6px 12px;
+
+    font-size: 14px;
+    font-weight: 1000;
+
+    background-color: #fff;
+
+    border: 3px solid rgb(230, 230, 230);
+}
+
