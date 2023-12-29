@@ -33,7 +33,9 @@ function ExperienceContainer({title="education", listOfExperiences=[]}){
   const [isClicked, setIsClicked] = useState(false)
   //Indicates if the form is open 
   const [formIsActive, setFormIsActive] = useState(false)
-  
+  //Indicates if the current form is being used to add a new experience or edit a current experience
+  const [addForm, setAddForm] = useState(false)
+
   let fieldNameList = []
   switch (title.toLocaleLowerCase()) {
     case "education":
@@ -74,22 +76,29 @@ function ExperienceContainer({title="education", listOfExperiences=[]}){
     setFormIsActive(!formIsActive)
   }
 
+  const switchFormType = () =>{
+    setAddForm(!addForm)
+  }
+
+  const headerIconSrc = `./public/${title.toLocaleLowerCase().split(" ").join("-")}-black.svg`
+  console.log(headerIconSrc)
+
   console.log(`${isClicked}, ${formIsActive}`)
   return (
-      <div className="experience-container-wrapper" onClick={handleClick}>
-          <div className="experience-header-div flex white-background rounded">
-            <div className="header-wrapper flex">
+      <div className="experience-container-wrapper">
+          <div className="experience-header-div flex white-background">
+            <div className="header-wrapper flex" onClick={handleClick}>
               <div className="left-side-wrapper flex">
-                <img className="icon" src="./public/education-black.svg" alt="" />
+                <img className="largerIcon" src={headerIconSrc} alt="" />
                 <h2>{title}</h2>
               </div>
               <img className="icon dropdown" src="./public/dropdown-black.svg" alt="dropdown" />
             </div>
-            {(formIsActive) && <Form listOfFields={fieldNameList}></Form>}
+            {(isClicked && formIsActive) && <Form listOfFields={fieldNameList} onHideForm = {() => setFormIsActive(false)} formType={() => setAddForm(true)}></Form>}
           </div>
           {((isClicked && !formIsActive) && (
             <>
-              <ExperienceCard experienceName="School exp"></ExperienceCard>
+              <ExperienceCard experienceName="School exp" showEditForm={() => { setFormIsActive(true), setAddForm(false)}}></ExperienceCard>
               <div className="add-container flex white-background">
                 <button className="display-resume-button add-button rounded flex" onClick={displayForm}>
                   <img className="icon" src="./public/add-black.svg" alt="plus" />
@@ -102,19 +111,37 @@ function ExperienceContainer({title="education", listOfExperiences=[]}){
   )
 }
 
-function ExperienceCard({experienceName=""}){
+function ExperienceCard({experienceName="", showEditForm}){
+  const [isVisible, setIsVisible] = useState(true)
+
+  const changeExperienceVisibility = () =>{
+    setIsVisible(!isVisible);
+  }
+
+  const displayEditForm = () =>{
+    showEditForm()
+  }
+
+  const iconSrc = isVisible ? "./public/visible-black.svg" : "./public/hidden-black.svg"
+
   return (
-      <div className="experience-card flex white-background">
+      <div className="experience-card flex white-background" onClick={displayEditForm}>
         <p className="experience-p">{experienceName}</p>
-        <img src="" alt="" />
+        <img className="largerIcon" src={iconSrc} alt="" onClick={changeExperienceVisibility} />
       </div>
   )
 }
 
-function Form({listOfFields=""}){
+function Form({listOfFields="", onHideForm, formType}){
+  console.log("formType: " + formType)
   const hideForm = () => {
-    setFormIsActive(!formIsActive)
+    onHideForm()
   }
+
+  const changeFormType = ()=>{
+    formType()
+  }
+
   return (
     <div className="form-wrapper flex">
       <form>
@@ -154,7 +181,7 @@ function Form({listOfFields=""}){
         </button>
         <div className="delete-and-save-div flex">
             <button className="display-resume-button cancelBtn" onClick={hideForm}>Cancel</button>
-            <button className="display-resume-button saveBtn">Save</button>
+            <button className="display-resume-button saveBtn" onClick={changeFormType}>Save</button>
         </div>
       </div>
     </div>
