@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "../Styles/ResumeFields.css"
 import uniqid from 'uniqid';
 
+//This will hold all the different experiences (i.e. education, work, volunteer)
+let experienceObjectList = []
+
 function ResumeFields() {
   return (
     <div className="fields-wrapper flex">
@@ -28,7 +31,7 @@ function PersonalDetails(){
             </div>
 }
 
-function ExperienceContainer({title="education", listOfExperiences=[]}){
+function ExperienceContainer({title="education"}){
   //Indicates if the container pannel has been clicked
   const [isClicked, setIsClicked] = useState(false)
   //Indicates if the form is open 
@@ -98,7 +101,10 @@ function ExperienceContainer({title="education", listOfExperiences=[]}){
           </div>
           {((isClicked && !formIsActive) && (
             <>
-              <ExperienceCard experienceName="School exp" showEditForm={() => { setFormIsActive(true), setAddForm(false)}}></ExperienceCard>
+              {experienceObjectList.map(experienceObject => {
+                console.log("LALA: " + experienceObject[1])
+                return <ExperienceCard key={experienceObject.id} experienceName={experienceObject[0]} showEditForm={() => { setFormIsActive(true), setAddForm(false)}}></ExperienceCard>
+              })}
               <div className="add-container flex white-background">
                 <button className="display-resume-button add-button rounded flex" onClick={displayForm}>
                   <img className="icon" src="./public/add-black.svg" alt="plus" />
@@ -114,7 +120,8 @@ function ExperienceContainer({title="education", listOfExperiences=[]}){
 function ExperienceCard({experienceName="", showEditForm}){
   const [isVisible, setIsVisible] = useState(true)
 
-  const changeExperienceVisibility = () =>{
+  const changeExperienceVisibility = (event) =>{
+    event.stopPropagation()
     setIsVisible(!isVisible);
   }
 
@@ -127,12 +134,23 @@ function ExperienceCard({experienceName="", showEditForm}){
   return (
       <div className="experience-card flex white-background" onClick={displayEditForm}>
         <p className="experience-p">{experienceName}</p>
-        <img className="largerIcon" src={iconSrc} alt="" onClick={changeExperienceVisibility} />
+        <img className="largerIcon eye" src={iconSrc} alt="" onClick={changeExperienceVisibility} />
       </div>
   )
 }
 
 function Form({listOfFields="", onHideForm, formType}){
+  let experienceObject = {id: uniqid()};
+
+  listOfFields.map(field =>{
+    experienceObject[field.fieldName] = ""
+  })
+  
+  experienceObject["start-date"] = ""
+  experienceObject["end-date"] = ""
+  experienceObject["location"] = ""
+  experienceObject["description"] = ""
+
   console.log("formType: " + formType)
   const hideForm = () => {
     onHideForm()
@@ -142,35 +160,46 @@ function Form({listOfFields="", onHideForm, formType}){
     formType()
   }
 
+  //This function will update the 
+  const saveInputValue = (event) =>{
+    experienceObject[event.target.id] = event.target.value
+    console.log(experienceObject)
+  }
+
+  const createNewExperienceObject = () =>{
+    experienceObjectList.push(experienceObject)
+    console.log(experienceObjectList)
+  }
+
   return (
     <div className="form-wrapper flex">
       <form>
-        {listOfFields.map(field =>{
+        {listOfFields.map((field) =>{
           return(
           <div key={field.id} className="field-wrapper flex">
             <label className="form-field-label" htmlFor={field.fieldName}>{field.fieldName}</label>
-            <input id={field.fieldName} type='text' placeholder={field.placeholder}></input>
+            <input id={field.fieldName} type='text' placeholder={field.placeholder} onChange={saveInputValue}></input>
           </div>
           )
         })}
         <div className="date-wrapper flex">
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="start-date">Start Date</label>
-              <input id="start-date" type='text' placeholder="Enter start date"></input>
+              <input id="start-date" type='text' placeholder="Enter start date" onChange={saveInputValue}></input>
           </div>
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="end-date">End Date</label>
-              <input id="end-date" type='text' placeholder="Enter end date"></input>
+              <input id="end-date" type='text' placeholder="Enter end date" onChange={saveInputValue}></input>
           </div>
         </div>
         <div className="field-wrapper flex">
             <label className="form-field-label" htmlFor="location">Location</label>
-            <input id="location" type='text' placeholder="Arizona, U.S."></input>
+            <input id="location" type='text' placeholder="Arizona, U.S." onChange={saveInputValue}></input>
         </div>
           {listOfFields[0].fieldName === "Company Name" &&(
             <div className="field-wrapper flex">
-              <label className="form-field-label" htmlFor="company-description">Company Description</label>
-              <textarea id="company-description" placeholder="Enter a descriptio of experience"></textarea>
+              <label className="form-field-label" htmlFor="description">Company Description</label>
+              <textarea id="description" placeholder="Enter a descriptio of experience" onChange={saveInputValue}></textarea>
             </div>
           )}
       </form>
@@ -181,7 +210,7 @@ function Form({listOfFields="", onHideForm, formType}){
         </button>
         <div className="delete-and-save-div flex">
             <button className="display-resume-button cancelBtn" onClick={hideForm}>Cancel</button>
-            <button className="display-resume-button saveBtn" onClick={changeFormType}>Save</button>
+            <button className="display-resume-button saveBtn" onClick={createNewExperienceObject}>Save</button>
         </div>
       </div>
     </div>
