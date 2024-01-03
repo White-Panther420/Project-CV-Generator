@@ -141,6 +141,17 @@ function ExperienceCard({experienceName="", showEditForm}){
 }
 
 function Form({listOfFields="", onHideForm, toggleFormType, experienceType, currFormState}){
+  const field1 = listOfFields[0].fieldName
+  const field2 = listOfFields[0].fieldName
+  const [fields, setFields] = useState({
+    field1,
+    field2,
+    startDate: "",
+    endDate: "",
+    location: "",
+    description: "",
+  })
+
   console.log("CURR STATE: " + currFormState)
   console.log(listOfFields)
   let experienceObject = "";
@@ -193,9 +204,9 @@ function Form({listOfFields="", onHideForm, toggleFormType, experienceType, curr
 
   //This function will update the experienceObject everytime the user types
   const saveInputValue = (event) =>{
-    console.log("AAAHHH")
-    console.log(experienceObject)
-    console.log(experienceObjectToEdit)
+    const fieldToUpdate = event.target.id
+    setFields({...fields, fields.fieldToUpdate: event.target.value})
+
     if(experienceObject !== ""){
       experienceObject[event.target.id] = event.target.value
     }else{
@@ -204,7 +215,8 @@ function Form({listOfFields="", onHideForm, toggleFormType, experienceType, curr
   }
 
   //Once the user submits the form, the experienceObject will then be placed in the list of experienceObjects
-  const createNewExperienceObject = () =>{
+  const createNewExperienceObject = (e) =>{
+    e.preventDefault()
     // Used as a generic property to display the name of an experience
     experienceObject["experience name"] = experienceObject.School || experienceObject["Company Name"]
 
@@ -225,28 +237,28 @@ function Form({listOfFields="", onHideForm, toggleFormType, experienceType, curr
           return(
           <div key={field.id} className="field-wrapper flex">
             <label className="form-field-label" htmlFor={field.fieldName}>{field.fieldName}</label>
-            <input value={experienceObjectToEdit[field.fieldName]} id={field.fieldName} type='text' placeholder={field.placeholder} onChange={saveInputValue}></input>
+            <input value={fields[field.fieldName]} id={field.fieldName} type='text' placeholder={field.placeholder} onChange={saveInputValue}></input>
           </div>
           )
         })}
         <div className="date-wrapper flex">
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="start-date">Start Date</label>
-              <input value={experienceObjectToEdit["start-date"]} id="start-date" type='text' placeholder="Enter start date" onChange={saveInputValue}></input>
+              <input value={fields.startDate} id="start-date" type='text' placeholder="Enter start date" onChange={saveInputValue}></input>
           </div>
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="end-date">End Date</label>
-              <input value={experienceObjectToEdit["end-date"]} id="end-date" type='text' placeholder="Enter end date" onChange={saveInputValue}></input>
+              <input value={fields.endDate} id="end-date" type='text' placeholder="Enter end date" onChange={saveInputValue}></input>
           </div>
         </div>
         <div className="field-wrapper flex">
             <label className="form-field-label" htmlFor="location">Location</label>
-            <input value={experienceObjectToEdit["location"]} id="location" type='text' placeholder="Arizona, U.S." onChange={saveInputValue}></input>
+            <input value={fields.location} id="location" type='text' placeholder="Arizona, U.S." onChange={saveInputValue}></input>
         </div>
           {listOfFields[0].fieldName === "Company Name" &&(
             <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="description">Company Description</label>
-              <textarea value={experienceObjectToEdit["description"] || ""} id="description" placeholder="Enter a descriptio of experience" onChange={saveInputValue}></textarea>
+              <textarea value={fields.description || ""} id="description" placeholder="Enter a descriptio of experience" onChange={saveInputValue}></textarea>
             </div>
           )}
       </form>
@@ -257,7 +269,7 @@ function Form({listOfFields="", onHideForm, toggleFormType, experienceType, curr
         </button>
         <div className="delete-and-save-div flex">
             <button className="display-resume-button cancelBtn" onClick={hideForm}>Cancel</button>
-            <button className="display-resume-button saveBtn" onClick={createNewExperienceObject}>Save</button>
+            <button className="display-resume-button saveBtn" type="submit">Save</button>
         </div>
       </div>
     </div>
