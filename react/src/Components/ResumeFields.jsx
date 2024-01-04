@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import "../Styles/ResumeFields.css"
 import uniqid from 'uniqid';
@@ -38,6 +39,12 @@ function ExperienceContainer({title="education"}){
   const [formIsActive, setFormIsActive] = useState(false)
   //Indicates if the current form is being used to add a new experience or edit a current experience
   const [addForm, setAddForm] = useState(false)
+  // This state represents the current experience being edited and will hold the
+  // value of the object tied to thhat experience so the form can render with the values
+  const [currEditedExperience, setCurrEditedExperience] = useState(null)
+
+  console.log("CURR EXP STATE")
+  console.log(currEditedExperience)
 
   let fieldNameList = []
   switch (title.toLocaleLowerCase()) {
@@ -80,15 +87,10 @@ function ExperienceContainer({title="education"}){
     setFormIsActive(!formIsActive)
   }
 
-  const toggleAddForm = () =>{
-    console.log("LE ADD FORM: " + addForm)
-    setAddForm(!addForm)
-  }
-
-
   const headerIconSrc = `./public/${title.toLocaleLowerCase().split(" ").join("-")}-black.svg`
 
   console.log(`${isClicked}, ${formIsActive}, ${addForm}`)
+  console.log(experienceObjectList)
   return (
       <div className="experience-container-wrapper">
           <div className="experience-header-div flex white-background">
@@ -99,15 +101,36 @@ function ExperienceContainer({title="education"}){
               </div>
               <img className="icon dropdown" src="./public/dropdown-black.svg" alt="dropdown" />
             </div>
-            {(isClicked && formIsActive) && <Form listOfFields={fieldNameList} experienceType={title} currFormState={addForm} onHideForm = {() => setFormIsActive(false)}></Form>}
+            {(isClicked && formIsActive) &&
+             <Form 
+              listOfFields={fieldNameList} 
+              experienceType={title} 
+              currEditedExperience = {currEditedExperience}
+              currFormState={addForm} 
+              onHideForm = {() => setFormIsActive(false)}>
+             </Form>
+            }
           </div>
           {((isClicked && !formIsActive) && (
             <>
               {experienceObjectList.map(experienceObject => {
-                return experienceObject["experience name"] !== "" && experienceObject.experienceType.toLocaleLowerCase() == title.toLocaleLowerCase() &&  <ExperienceCard key={experienceObject.id} experienceName={experienceObject["experience name"]} showEditForm={() => { setFormIsActive(true), setAddForm(false)}}></ExperienceCard>
+                console.log(experienceObject)
+                return(
+                  experienceObject["experience name"] !== "" && 
+                  experienceObject["experience type"].toLocaleLowerCase() == title.toLocaleLowerCase() &&  
+                  <ExperienceCard 
+                    key={experienceObject.id} 
+                    experienceName={experienceObject["experience name"]} 
+                    showEditForm={() => { 
+                      setFormIsActive(true), 
+                      setAddForm(false),
+                      setCurrEditedExperience(experienceObject)
+                    }}>
+                  </ExperienceCard>
+                )
               })}
               <div className="add-container flex white-background">
-                <button className="display-resume-button add-button rounded flex" onClick={() =>{displayForm(); toggleAddForm();}}>
+                <button className="display-resume-button add-button rounded flex" onClick={() =>{displayForm(); setAddForm(true);}}>
                   <img className="icon" src="./public/add-black.svg" alt="plus" />
                   <p>{title}</p>
                 </button>
@@ -140,88 +163,55 @@ function ExperienceCard({experienceName="", showEditForm}){
   )
 }
 
-function Form({listOfFields="", onHideForm, toggleFormType, experienceType, currFormState}){
+function Form({listOfFields="", onHideForm, experienceType, currEditedExperience, currFormState}){
   const field1 = listOfFields[0].fieldName
-  const field2 = listOfFields[0].fieldName
+  const field2 = listOfFields[1].fieldName
   const [fields, setFields] = useState({
-    field1,
-    field2,
-    startDate: "",
-    endDate: "",
-    location: "",
-    description: "",
+    [field1]: currFormState ? "" : (currEditedExperience ? currEditedExperience[field1] : ""),
+    [field2]: currFormState ? "" : (currEditedExperience ? currEditedExperience[field2] : ""),
+    startDate: currFormState ? "" : (currEditedExperience ? currEditedExperience.startDate : ""),
+    endDate: currFormState ? "" : (currEditedExperience ? currEditedExperience.endDate : ""),
+    location: currFormState ? "" : (currEditedExperience ? currEditedExperience.location : ""),
+    description: currFormState ? "" : (currEditedExperience ? currEditedExperience.description : ""),
   })
 
-  console.log("CURR STATE: " + currFormState)
-  console.log(listOfFields)
-  let experienceObject = "";
-  let experienceObjectToEdit = ""
-  // currFormState = true means the form is being used to add a new experience
-  if(currFormState){
-    experienceObject = {id: uniqid(),  
-      experienceType: experienceType
-    };
-  
-    listOfFields.map(field =>{
-      experienceObject[field.fieldName] = ""
-    })
-    
-    experienceObject["start-date"] = ""
-    experienceObject["end-date"] = ""
-    experienceObject["location"] = ""
-    experienceObject["description"] = ""
-
-    console.log("EXP OBJECT")
-    console.log(experienceObject)
-  }else{
-    for (const key in experienceObjectList) {
-      if (Object.hasOwnProperty.call(experienceObjectList, key)) {
-        const experienceObject = experienceObjectList[key];
-        const experienceName = document.querySelector(".experience-p")
-        console.log("COMPARISON")
-        console.log(experienceObject)
-        console.log(experienceName.textContent)
-        console.log(experienceObject["experience name"])
-        if(experienceName.textContent === experienceObject["experience name"]){
-          experienceObjectToEdit = experienceObject
-          console.log("WE FOUND IT!!!!")
-          console.log(experienceObjectToEdit)
-        }
-      }
-    }
-  }
-  
- 
-
-  console.log("formType: " + toggleFormType)
   const hideForm = () => {
     onHideForm()
   }
 
-  const changeFormType = ()=>{
-    toggleFormType()
-  }
-
-  //This function will update the experienceObject everytime the user types
-  const saveInputValue = (event) =>{
-    const fieldToUpdate = event.target.id
-    setFields({...fields, fields.fieldToUpdate: event.target.value})
-
-    if(experienceObject !== ""){
-      experienceObject[event.target.id] = event.target.value
-    }else{
-      experienceObjectToEdit[event.target.id] = event.target.value
-    }
-  }
-
-  //Once the user submits the form, the experienceObject will then be placed in the list of experienceObjects
+  //Adds new experience to list of experienceObjects when form is submitted
   const createNewExperienceObject = (e) =>{
-    e.preventDefault()
-    // Used as a generic property to display the name of an experience
+    console.log("CURR FORM STATE")
+    console.log(currFormState)
+    // copying fields object so we can add a generic property
+    const experienceObject = fields
     experienceObject["experience name"] = experienceObject.School || experienceObject["Company Name"]
+    experienceObject["experience type"] = experienceType
+    if(currFormState){
+      experienceObjectList.push(experienceObject)
+      console.log("FIELDDSSSS")
+      console.log(fields)
+    }else{
+      for (const key in experienceObjectList) {
+        if (Object.hasOwnProperty.call(experienceObjectList, key)) {
+          console.log("FIELDS")
+          console.log(fields)
+          let expObj = experienceObjectList[key];
+          // Avoid looking up an experience with the same name but different experience type
+          if(currEditedExperience["experience type"].toLocaleLowerCase() === expObj["experience type"].toLocaleLowerCase()){
+            if(currEditedExperience["experience name"] === expObj["experience name"]){
+              experienceObjectList[key] = {...experienceObject}
+              console.log("UPDATED!")
+              console.log(experienceObjectList)
+            }
+          }
+        }
+      }
+    }
 
-    experienceObjectList.push(experienceObject)
     hideForm()
+    e.preventDefault()
+
   }
 
   const deleteExperienceObject = () => {
@@ -232,46 +222,73 @@ function Form({listOfFields="", onHideForm, toggleFormType, experienceType, curr
     <div className="form-wrapper flex">
       <form onSubmit={createNewExperienceObject}>
         {listOfFields.map((field) =>{
-          console.log("EDOTTT")
-          console.log(experienceObjectToEdit[field.fieldName])
           return(
           <div key={field.id} className="field-wrapper flex">
             <label className="form-field-label" htmlFor={field.fieldName}>{field.fieldName}</label>
-            <input value={fields[field.fieldName]} id={field.fieldName} type='text' placeholder={field.placeholder} onChange={saveInputValue}></input>
+            <input 
+              value={fields[field.fieldName]} 
+              id={field.fieldName} type='text' 
+              placeholder={field.placeholder} 
+              onChange={(event)=> setFields({...fields, [field.fieldName]: event.target.value})}>
+            </input>
           </div>
           )
         })}
         <div className="date-wrapper flex">
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="start-date">Start Date</label>
-              <input value={fields.startDate} id="start-date" type='text' placeholder="Enter start date" onChange={saveInputValue}></input>
-          </div>
+              <input 
+                value={fields.startDate} 
+                id="start-date" 
+                type='text' 
+                placeholder="Enter start date" 
+                onChange={(event)=> setFields({...fields, startDate: event.target.value})}
+              />
+            </div>    
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="end-date">End Date</label>
-              <input value={fields.endDate} id="end-date" type='text' placeholder="Enter end date" onChange={saveInputValue}></input>
+              <input 
+                value={fields.endDate} 
+                id="end-date" 
+                type='text' 
+                placeholder="Enter end date" 
+                onChange={(event)=> setFields({...fields, endDate: event.target.value})}
+              />
           </div>
         </div>
         <div className="field-wrapper flex">
             <label className="form-field-label" htmlFor="location">Location</label>
-            <input value={fields.location} id="location" type='text' placeholder="Arizona, U.S." onChange={saveInputValue}></input>
+            <input 
+              value={fields.location} 
+              id="location" 
+              type='text' 
+              placeholder="Arizona, U.S." 
+              onChange={(event)=> setFields({...fields, location: event.target.value})}
+            />
         </div>
           {listOfFields[0].fieldName === "Company Name" &&(
             <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="description">Company Description</label>
-              <textarea value={fields.description || ""} id="description" placeholder="Enter a descriptio of experience" onChange={saveInputValue}></textarea>
+              <textarea 
+                value={fields.description || ""} 
+                id="description" 
+                placeholder="Enter a descriptio of experience" 
+                onChange={(event)=> setFields({...fields, description: event.target.value})}
+              />
             </div>
           )}
-      </form>
-      <div className="form-action-buttons-container flex">
-        <button className="delete-resume-button delete-form-button flex rounded">
-          <img className='icon' src="./public/delete-red.svg" alt="" />
-          <p className="delete" onClick={deleteExperienceObject}>Delete</p>
-        </button>
-        <div className="delete-and-save-div flex">
-            <button className="display-resume-button cancelBtn" onClick={hideForm}>Cancel</button>
-            <button className="display-resume-button saveBtn" type="submit">Save</button>
+        <div className="form-action-buttons-container flex">
+          <button className="delete-resume-button delete-form-button flex rounded">
+            <img className='icon' src="./public/delete-red.svg" alt="" />
+            <p className="delete" onClick={deleteExperienceObject}>Delete</p>
+          </button>
+          <div className="delete-and-save-div flex">
+              <button className="display-resume-button cancelBtn" onClick={hideForm}>Cancel</button>
+              <button className="display-resume-button saveBtn" type="submit">Save</button>
+          </div>
         </div>
-      </div>
+      </form>
+     
     </div>
   )
 }
