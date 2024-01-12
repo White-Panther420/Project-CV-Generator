@@ -181,7 +181,9 @@ function ExperienceCard({experienceName="", showEditForm}){
 function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp, currFormState, updateExpObjList}){
   console.log("JUST TO SUFFER??")
   console.log(currEditedExperience)
-  
+  const [inputFields, setInputFields] = useState(currEditedExperience)
+
+
   const hideForm = () => {
     onHideForm()
   }
@@ -210,12 +212,12 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
             <label className="form-field-label" htmlFor={field.fieldName}>{field.fieldName}</label>
             <input 
             //Check if we are adding a new experience or if we are editing one from a valid object
-              value={currFormState ? "" : (currEditedExperience ? currEditedExperience[field.fieldName] : "")}
+              value={currFormState ? "" : inputFields[field.fieldName]}
               id={field.fieldName} type='text' 
               placeholder={field.placeholder} 
               onChange={(event)=> {
+                setInputFields({...inputFields, [field.fieldName]: event.target.value})
                 updateExpObjList(field.fieldName, event.target.value, currEditedExperience)
-                setCurrEditExp(field.fieldName, event.target.value)
               }}
             >
             </input>
@@ -231,8 +233,8 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
                 type='text' 
                 placeholder="Enter start date" 
                 onChange={(event)=>{
+                  setInputFields({...inputFields, "startDate": event.target.value})
                   updateExpObjList("startDate", event.target.value, currEditedExperience)
-                  updateCurrEditedExpProperty("startDate", event.target.value)
               }}
 
               />
@@ -244,7 +246,10 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
               id="end-date" 
                 type='text' 
                 placeholder="Enter end date" 
-                onChange={(event)=>updateExpObjList("endDate", event.target.value, currEditedExperience)}
+                onChange={(event)=>{
+                  setInputFields({...inputFields, "endDate": event.target.value})
+                  updateExpObjList("endDate", event.target.value, currEditedExperience)}
+                }
             />
           </div>
         </div>
@@ -255,7 +260,10 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
               id="location" 
               type='text' 
               placeholder="Arizona, U.S." 
-              onChange={(event)=>updateExpObjList("location", event.target.value, currEditedExperience)}
+              onChange={(event)=>{
+                setInputFields({...inputFields, "location": event.target.value})
+                updateExpObjList("location", event.target.value, currEditedExperience)}
+              }
             />
         </div>
           {listOfFields[0].fieldName === "Company Name" &&(
@@ -265,7 +273,10 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
               value={currFormState ? "" : (currEditedExperience ? currEditedExperience.description : "")}
               id="description" 
                 placeholder="Enter a descriptio of experience" 
-                onChange={(event)=>updateExpObjList("description", event.target.value, currEditedExperience)}
+                onChange={(event)=>{
+                  setInputFields({...inputFields, "description": event.target.value})
+                  updateExpObjList("description", event.target.value, currEditedExperience)}
+                }
               />
             </div>
           )}
