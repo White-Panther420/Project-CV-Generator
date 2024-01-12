@@ -3,56 +3,23 @@ import React, { useState } from "react";
 import "../Styles/ResumeFields.css"
 import uniqid from 'uniqid';
 
-let experienceObjectList = [
-  {
-    School: "Glendale Community College",
-    Degree: "Associates in Science",
-    startDate: "08/21/2017",
-    endDate: "05/14/2021",
-    location: "Arizona, U.S.",
-    Description: "",
-    "experience name": "Glendale Community College",
-    "experience type": "education"
-  },
-  {
-    School: "Arizona State University",
-    Degree: "Bachelors of Computer Science",
-    startDate: "08/14/2021",
-    endDate: "05/14/2024",
-    location: "Arizona, U.S.",
-    Description: "",
-    "experience name": "Arizona State University",
-    "experience type": "education"
-  },
-  {
-    "Company Name": "Arizona State University",
-    "Position Title": "CMEE Front Desk Receptionist",
-    startDate: "09/01/2021",
-    endDate: "04/14/2023",
-    location: "Arizona, U.S.",
-    description: "The tasks involved updating the content of web pages featuring lists of W. P. Carey events using HTML to provide accurate and timely information for students and community members. Additionally, a calling campaign and LinkedIn audits were conducted to gather undergraduate student employment outcomes, resulting in a notable increase of over 15% in responses from 2021 to 2022. Furthermore, I played a role in facilitating student check-ins for career advising appointments by effectively communicating with career coaches. These efforts aimed to enhance the overall experience and engagement for students within the academic and career services sphere.",
-    "experience name": "Arizona State University",
-    "experience type": "work experience"
-  },
-  {
-    "Company Name": "Glendale Community College",
-    "Position Title": "CSS Front Desk Receptionist",
-    startDate: "10/15/2018",
-    endDate: "01/15/2021",
-    location: "Arizona, U.S.",
-    description: "As a team member in the Career Services department from October 2018 to December 2020, I assisted over 20,000 students and community members with job-related activities, including the federal work-study process and resume and cover letter reviews. My role extended to promoting Career Services workshops and job fairs through marketing initiatives, event preparations, and onsite duties. I handled main phone line inquiries, greeted visitors professionally, and supported various office projects such as researching job trends and internships. Additionally, I contributed to data entry for weekly computer usage and department visits. Acting as a liaison, I reached out to student clubs to present career-related topics, and I organized bi-weekly tabling events to promote Career Services and encourage resource utilization among students.",
-    "experience name": "Glendale Community College",
-    "experience type": "work experience"
-  }
-]
 
-function ResumeFields() {
+
+function ResumeFields({experienceObjectList=[], updateExpObjList}) {
   //This will hold all the different experiences (i.e. education, work, volunteer)
   return (
     <div className="fields-wrapper flex">
       <PersonalDetails />
-      <ExperienceContainer title="Education"/>
-      <ExperienceContainer title="Work Experience"/>
+      <ExperienceContainer 
+        title="Education"
+        experienceObjectList={experienceObjectList}
+        updateExpObjList={updateExpObjList}
+      />
+      <ExperienceContainer 
+        title="Work Experience"
+        experienceObjectList={experienceObjectList}
+        updateExpObjList={updateExpObjList}
+      />
     </div>
   )
 }
@@ -73,7 +40,7 @@ function PersonalDetails(){
             </div>
 }
 
-function ExperienceContainer({title="education"}){
+function ExperienceContainer({title="education", experienceObjectList=[], updateExpObjList}){
   //Indicates if the container pannel has been clicked
   const [isClicked, setIsClicked] = useState(false)
   //Indicates if the form is open 
@@ -81,7 +48,7 @@ function ExperienceContainer({title="education"}){
   //Indicates if the current form is being used to add a new experience or edit a current experience
   const [addForm, setAddForm] = useState(false)
   // This state represents the current experience being edited and will hold the
-  // value of the object tied to thhat experience so the form can render with the values
+  // value of the object tied to that experience so the form can render with the values
   const [currEditedExperience, setCurrEditedExperience] = useState(null)
 
   console.log("CURR EXP STATE")
@@ -127,10 +94,15 @@ function ExperienceContainer({title="education"}){
     console.log("CALLED")
     setFormIsActive(!formIsActive)
   }
+  const updateCurrEditedExpProperty = (propertyName, propertyValue) =>{
+    setCurrEditedExperience({...currEditedExperience, [propertyName]: propertyValue})
+  }
+
 
   const headerIconSrc = `./public/${title.toLocaleLowerCase().split(" ").join("-")}-black.svg`
 
   console.log(`${isClicked}, ${formIsActive}, ${addForm}`)
+  console.log("WHY ARE WE HERE?")
   console.log(experienceObjectList)
   return (
       <div className="experience-container-wrapper">
@@ -144,11 +116,13 @@ function ExperienceContainer({title="education"}){
             </div>
             {(isClicked && formIsActive) &&
              <Form 
-              listOfFields={fieldNameList} 
-              experienceType={title} 
-              currEditedExperience = {currEditedExperience}
-              currFormState={addForm} 
-              onHideForm = {() => setFormIsActive(false)}>
+                listOfFields={fieldNameList} 
+                experienceType={title} 
+                currEditedExperience = {currEditedExperience}
+                setCurrEditExp={updateCurrEditedExpProperty}
+                currFormState={addForm} 
+                updateExpObjList={updateExpObjList}
+                onHideForm = {() => setFormIsActive(false)}>
              </Form>
             }
           </div>
@@ -204,51 +178,17 @@ function ExperienceCard({experienceName="", showEditForm}){
   )
 }
 
-function Form({listOfFields="", onHideForm, experienceType, currEditedExperience, currFormState}){
-  const field1 = listOfFields[0].fieldName
-  const field2 = listOfFields[1].fieldName
-  const [fields, setFields] = useState({
-    [field1]: currFormState ? "" : (currEditedExperience ? currEditedExperience[field1] : ""),
-    [field2]: currFormState ? "" : (currEditedExperience ? currEditedExperience[field2] : ""),
-    startDate: currFormState ? "" : (currEditedExperience ? currEditedExperience.startDate : ""),
-    endDate: currFormState ? "" : (currEditedExperience ? currEditedExperience.endDate : ""),
-    location: currFormState ? "" : (currEditedExperience ? currEditedExperience.location : ""),
-    description: currFormState ? "" : (currEditedExperience ? currEditedExperience.description : ""),
-  })
-
+function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp, currFormState, updateExpObjList}){
+  console.log("JUST TO SUFFER??")
+  console.log(currEditedExperience)
+  
   const hideForm = () => {
     onHideForm()
   }
 
   //Adds new experience to list of experienceObjects when form is submitted
   const createNewExperienceObject = (e) =>{
-    console.log("CURR FORM STATE")
-    console.log(currFormState)
-    // copying fields object so we can add a generic property
-    const experienceObject = fields
-    experienceObject["experience name"] = experienceObject.School || experienceObject["Company Name"]
-    experienceObject["experience type"] = experienceType
-    if(currFormState){
-      experienceObjectList.push(experienceObject)
-      console.log("FIELDDSSSS")
-      console.log(fields)
-    }else{
-      for (const key in experienceObjectList) {
-        if (Object.hasOwnProperty.call(experienceObjectList, key)) {
-          console.log("FIELDS")
-          console.log(fields)
-          let expObj = experienceObjectList[key];
-          // Avoid looking up an experience with the same name but different experience type
-          if(currEditedExperience["experience type"].toLocaleLowerCase() === expObj["experience type"].toLocaleLowerCase()){
-            if(currEditedExperience["experience name"] === expObj["experience name"]){
-              experienceObjectList[key] = {...experienceObject}
-              console.log("UPDATED!")
-              console.log(experienceObjectList)
-            }
-          }
-        }
-      }
-    }
+
 
     hideForm()
     e.preventDefault()
@@ -258,7 +198,9 @@ function Form({listOfFields="", onHideForm, experienceType, currEditedExperience
   const deleteExperienceObject = () => {
 
   }
-
+  console.log("FORM STUFF")
+  console.log(updateExpObjList)
+  console.log(currEditedExperience)
   return (
     <div className="form-wrapper flex">
       <form onSubmit={createNewExperienceObject}>
@@ -267,10 +209,15 @@ function Form({listOfFields="", onHideForm, experienceType, currEditedExperience
           <div key={field.id} className="field-wrapper flex">
             <label className="form-field-label" htmlFor={field.fieldName}>{field.fieldName}</label>
             <input 
-              value={fields[field.fieldName]} 
+            //Check if we are adding a new experience or if we are editing one from a valid object
+              value={currFormState ? "" : (currEditedExperience ? currEditedExperience[field.fieldName] : "")}
               id={field.fieldName} type='text' 
               placeholder={field.placeholder} 
-              onChange={(event)=> setFields({...fields, [field.fieldName]: event.target.value})}>
+              onChange={(event)=> {
+                updateExpObjList(field.fieldName, event.target.value, currEditedExperience)
+                setCurrEditExp(field.fieldName, event.target.value)
+              }}
+            >
             </input>
           </div>
           )
@@ -279,42 +226,46 @@ function Form({listOfFields="", onHideForm, experienceType, currEditedExperience
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="start-date">Start Date</label>
               <input 
-                value={fields.startDate} 
-                id="start-date" 
+              value={currFormState ? "" : (currEditedExperience ? currEditedExperience.startDate : "")}
+              id="start-date" 
                 type='text' 
                 placeholder="Enter start date" 
-                onChange={(event)=> setFields({...fields, startDate: event.target.value})}
+                onChange={(event)=>{
+                  updateExpObjList("startDate", event.target.value, currEditedExperience)
+                  updateCurrEditedExpProperty("startDate", event.target.value)
+              }}
+
               />
             </div>    
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="end-date">End Date</label>
               <input 
-                value={fields.endDate} 
-                id="end-date" 
+              value={currFormState ? "" : (currEditedExperience ? currEditedExperience.endDate : "")}
+              id="end-date" 
                 type='text' 
                 placeholder="Enter end date" 
-                onChange={(event)=> setFields({...fields, endDate: event.target.value})}
-              />
+                onChange={(event)=>updateExpObjList("endDate", event.target.value, currEditedExperience)}
+            />
           </div>
         </div>
         <div className="field-wrapper flex">
             <label className="form-field-label" htmlFor="location">Location</label>
             <input 
-              value={fields.location} 
+              value={currFormState ? "" : (currEditedExperience ? currEditedExperience.location : "")}
               id="location" 
               type='text' 
               placeholder="Arizona, U.S." 
-              onChange={(event)=> setFields({...fields, location: event.target.value})}
+              onChange={(event)=>updateExpObjList("location", event.target.value, currEditedExperience)}
             />
         </div>
           {listOfFields[0].fieldName === "Company Name" &&(
             <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="description">Company Description</label>
               <textarea 
-                value={fields.description || ""} 
-                id="description" 
+              value={currFormState ? "" : (currEditedExperience ? currEditedExperience.description : "")}
+              id="description" 
                 placeholder="Enter a descriptio of experience" 
-                onChange={(event)=> setFields({...fields, description: event.target.value})}
+                onChange={(event)=>updateExpObjList("description", event.target.value, currEditedExperience)}
               />
             </div>
           )}
