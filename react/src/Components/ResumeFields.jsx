@@ -228,7 +228,7 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="start-date">Start Date</label>
               <input 
-              value={currFormState ? "" : (currEditedExperience ? currEditedExperience.startDate : "")}
+              value={currFormState ? "" : inputFields["start date"]}
               id="start-date" 
                 type='text' 
                 placeholder="Enter start date" 
@@ -242,8 +242,8 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
           <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="end-date">End Date</label>
               <input 
-              value={currFormState ? "" : (currEditedExperience ? currEditedExperience.endDate : "")}
-              id="end-date" 
+                value={currFormState ? "" : inputFields["end date"]}
+                id="end-date" 
                 type='text' 
                 placeholder="Enter end date" 
                 onChange={(event)=>{
@@ -256,7 +256,7 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
         <div className="field-wrapper flex">
             <label className="form-field-label" htmlFor="location">Location</label>
             <input 
-              value={currFormState ? "" : (currEditedExperience ? currEditedExperience.location : "")}
+              value={currFormState ? "" : inputFields["location"]}
               id="location" 
               type='text' 
               placeholder="Arizona, U.S." 
@@ -270,8 +270,8 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
             <div className="field-wrapper flex">
               <label className="form-field-label" htmlFor="description">Company Description</label>
               <textarea 
-              value={currFormState ? "" : (currEditedExperience ? currEditedExperience.description : "")}
-              id="description" 
+                value={currFormState ? "" : inputFields["description"]}
+                id="description" 
                 placeholder="Enter a descriptio of experience" 
                 onChange={(event)=>{
                   setInputFields({...inputFields, "description": event.target.value})
