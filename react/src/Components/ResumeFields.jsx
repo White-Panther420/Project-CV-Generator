@@ -216,8 +216,8 @@ function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp
               id={field.fieldName} type='text' 
               placeholder={field.placeholder} 
               onChange={(event)=> {
-                setInputFields({...inputFields, [field.fieldName]: event.target.value})
                 updateExpObjList(field.fieldName, event.target.value, currEditedExperience)
+                setInputFields({...inputFields, [field.fieldName]: event.target.value})
               }}
             >
             </input>
