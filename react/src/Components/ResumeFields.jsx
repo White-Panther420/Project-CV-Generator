@@ -5,11 +5,14 @@ import uniqid from 'uniqid';
 
 
 
-function ResumeFields({experienceObjectList=[], updateExpObjList}) {
+function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetailsObject, updatePersonalDetails}) {
   //This will hold all the different experiences (i.e. education, work, volunteer)
   return (
     <div className="fields-wrapper flex">
-      <PersonalDetails />
+      <PersonalDetails 
+        personalDetailsObject = {personalDetailsObject}
+        updatePersonalDetails = {updatePersonalDetails}
+      />
       <ExperienceContainer 
         title="Education"
         experienceObjectList={experienceObjectList}
@@ -24,20 +27,51 @@ function ResumeFields({experienceObjectList=[], updateExpObjList}) {
   )
 }
 
-function PersonalDetails(){
-    return <div className="personal-details-wrapper flex white-background rounded">
+function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
+  const [values, setValues] = useState({personalDetailsObject})
+
+    return( 
+              <div className="personal-details-wrapper flex white-background rounded">
                 <h2 className="form-header">Personal Details</h2>
                 <form className="personal-details-form flex">
-                    <label className='personal-details-form-frield' htmlFor="fullName">Full name</label>
-                    <input id='fullName' type='text' placeholder='John Doe'></input>
-                    <label className="personal-details-form-frield" htmlFor="email">Email <span className='recommended'>(recommended)</span></label>
-                    <input id='email' type='email' placeholder='example@gmail.com'></input>
-                    <label className="personal-details-form-frield" htmlFor="phone">Phone number <span className='recommended'>(recommended)</span></label>
-                    <input id='phone' type='phone' placeholder='(555)-555-5555)'></input>
-                    <label className="personal-details-form-frield" htmlFor="location">Location <span className='recommended'>(recommended)</span></label>
-                    <input id='location' type='text' placeholder='Arizona, U.S.'></input>
+                  <label className='personal-details-form-frield' htmlFor="fullName">Full name</label>
+                  <input 
+                    value={personalDetailsObject["Full Name"]} 
+                    id='fullName' 
+                    type='text' 
+                    placeholder='John Doe'
+                    onChange={(event) => setValues({...values, "Full Name": event.target.value})}
+                  />
+
+                  <label className='personal-details-form-frield' htmlFor="email">Email <span className='recommended'>(recommended)</span></label>
+                  <input 
+                    value={personalDetailsObject["Email"]} 
+                    id='email' 
+                    type='email' 
+                    placeholder='example@gmail.com'
+                    onChange={(event) => setValues({...values, "Email": event.target.value})}
+                  />
+
+                  <label className='personal-details-form-frield' htmlFor="phone">Phone number <span className='recommended'>(recommended)</span></label>
+                  <input 
+                    value={personalDetailsObject["Phone Number"]} 
+                    id='phone' 
+                    type='phone' 
+                    placeholder='(555)-555-5555'
+                    onChange={(event) => setValues({...values, "Phone Number": event.target.value})}
+                  />
+
+                  <label className='personal-details-form-frield' htmlFor="location">Location <span className='recommended'>(recommended)</span></label>
+                  <input 
+                    value={personalDetailsObject["Location"]} 
+                    id='location' 
+                    type='text' 
+                    placeholder='Arizona, U.S.'
+                    onChange={(event) => setValues({...values, "Location": event.target.value})}
+                  />
                 </form>
-            </div>
+              </div>
+    )
 }
 
 function ExperienceContainer({title="education", experienceObjectList=[], updateExpObjList}){
@@ -178,123 +212,114 @@ function ExperienceCard({experienceName="", showEditForm}){
   )
 }
 
-function Form({listOfFields="", onHideForm, currEditedExperience, setCurrEditExp, currFormState, updateExpObjList}){
-  console.log("JUST TO SUFFER??")
-  console.log(currEditedExperience)
-  const [inputFields, setInputFields] = useState(currEditedExperience)
-
-
-  const hideForm = () => {
-    onHideForm()
-  }
-
-  //Adds new experience to list of experienceObjects when form is submitted
-  const createNewExperienceObject = (e) =>{
-
-
-    hideForm()
-    e.preventDefault()
-
-  }
-
-  const deleteExperienceObject = () => {
-
-  }
-  console.log("FORM STUFF")
-  console.log(updateExpObjList)
-  console.log(currEditedExperience)
-  return (
-    <div className="form-wrapper flex">
-      <form onSubmit={createNewExperienceObject}>
-        {listOfFields.map((field) =>{
-          return(
-          <div key={field.id} className="field-wrapper flex">
-            <label className="form-field-label" htmlFor={field.fieldName}>{field.fieldName}</label>
-            <input 
-            //Check if we are adding a new experience or if we are editing one from a valid object
-              value={currFormState ? "" : inputFields[field.fieldName]}
-              id={field.fieldName} type='text' 
-              placeholder={field.placeholder} 
-              onChange={(event)=> {
-                updateExpObjList(field.fieldName, event.target.value, currEditedExperience)
-                setInputFields({...inputFields, [field.fieldName]: event.target.value})
-              }}
-            >
-            </input>
-          </div>
-          )
-        })}
-        <div className="date-wrapper flex">
-          <div className="field-wrapper flex">
-              <label className="form-field-label" htmlFor="start-date">Start Date</label>
+function Form({listOfFields="", onHideForm, currEditedExperience, experienceType, setCurrEditExp, currFormState, updateExpObjList}){
+    const field1 = listOfFields[0].fieldName
+    const field2 = listOfFields[1].fieldName
+    //If we have an add form or invalid experience object, set input fields to blank
+    const [fields, setFields] = useState({
+      id: currFormState ? uniqid() : (currEditedExperience ? currEditedExperience.id : uniqid()),
+      [field1]: currFormState ? "" : (currEditedExperience ? currEditedExperience[field1] : ""),
+      [field2]: currFormState ? "" : (currEditedExperience ? currEditedExperience[field2] : ""),
+      startDate: currFormState ? "" : (currEditedExperience ? currEditedExperience.startDate : ""),
+      endDate: currFormState ? "" : (currEditedExperience ? currEditedExperience.endDate : ""),
+      location: currFormState ? "" : (currEditedExperience ? currEditedExperience.location : ""),
+      description: currFormState ? "" : (currEditedExperience ? currEditedExperience.description : ""),
+    })
+  
+    const hideForm = () => {
+      onHideForm()
+    }
+  
+    //Adds new experience to list of experienceObjects when form is submitted
+    const createNewExperienceObject = (e) =>{
+      console.log("SAVE FIELDS")
+      console.log(fields)
+      console.log(currEditedExperience)
+      fields["experience name"] = fields[field1]
+      fields["experience type"] = experienceType;
+      updateExpObjList(fields)
+      hideForm()
+      e.preventDefault()
+    }
+  
+    const deleteExperienceObject = () => {
+  
+    }
+  
+    return (
+      <div className="form-wrapper flex">
+        <form onSubmit={createNewExperienceObject}>
+          {listOfFields.map((field) =>{
+            return(
+            <div key={field.id} className="field-wrapper flex">
+              <label className="form-field-label" htmlFor={field.fieldName}>{field.fieldName}</label>
               <input 
-              value={currFormState ? "" : inputFields["start date"]}
-              id="start-date" 
-                type='text' 
-                placeholder="Enter start date" 
-                onChange={(event)=>{
-                  setInputFields({...inputFields, "startDate": event.target.value})
-                  updateExpObjList("startDate", event.target.value, currEditedExperience)
-              }}
-
-              />
-            </div>    
-          <div className="field-wrapper flex">
-              <label className="form-field-label" htmlFor="end-date">End Date</label>
-              <input 
-                value={currFormState ? "" : inputFields["end date"]}
-                id="end-date" 
-                type='text' 
-                placeholder="Enter end date" 
-                onChange={(event)=>{
-                  setInputFields({...inputFields, "endDate": event.target.value})
-                  updateExpObjList("endDate", event.target.value, currEditedExperience)}
-                }
-            />
-          </div>
-        </div>
-        <div className="field-wrapper flex">
-            <label className="form-field-label" htmlFor="location">Location</label>
-            <input 
-              value={currFormState ? "" : inputFields["location"]}
-              id="location" 
-              type='text' 
-              placeholder="Arizona, U.S." 
-              onChange={(event)=>{
-                setInputFields({...inputFields, "location": event.target.value})
-                updateExpObjList("location", event.target.value, currEditedExperience)}
-              }
-            />
-        </div>
-          {listOfFields[0].fieldName === "Company Name" &&(
-            <div className="field-wrapper flex">
-              <label className="form-field-label" htmlFor="description">Company Description</label>
-              <textarea 
-                value={currFormState ? "" : inputFields["description"]}
-                id="description" 
-                placeholder="Enter a descriptio of experience" 
-                onChange={(event)=>{
-                  setInputFields({...inputFields, "description": event.target.value})
-                  updateExpObjList("description", event.target.value, currEditedExperience)}
-                }
-              />
+                value={fields[field.fieldName]} 
+                id={field.fieldName} type='text' 
+                placeholder={field.placeholder} 
+                onChange={(event)=> setFields({...fields, [field.fieldName]: event.target.value})}>
+              </input>
             </div>
-          )}
-        <div className="form-action-buttons-container flex">
-          <button className="delete-resume-button delete-form-button flex rounded">
-            <img className='icon' src="./public/delete-red.svg" alt="" />
-            <p className="delete" onClick={deleteExperienceObject}>Delete</p>
-          </button>
-          <div className="delete-and-save-div flex">
-              <button className="display-resume-button cancelBtn" onClick={hideForm}>Cancel</button>
-              <button className="display-resume-button saveBtn" type="submit">Save</button>
+            )
+          })}
+          <div className="date-wrapper flex">
+            <div className="field-wrapper flex">
+                <label className="form-field-label" htmlFor="start-date">Start Date</label>
+                <input 
+                  value={fields.startDate} 
+                  id="start-date" 
+                  type='text' 
+                  placeholder="Enter start date" 
+                  onChange={(event)=> setFields({...fields, startDate: event.target.value})}
+                />
+              </div>    
+            <div className="field-wrapper flex">
+                <label className="form-field-label" htmlFor="end-date">End Date</label>
+                <input 
+                  value={fields.endDate} 
+                  id="end-date" 
+                  type='text' 
+                  placeholder="Enter end date" 
+                  onChange={(event)=> setFields({...fields, endDate: event.target.value})}
+                />
+            </div>
           </div>
-        </div>
-      </form>
-     
-    </div>
-  )
-}
-
-
-export default ResumeFields
+          <div className="field-wrapper flex">
+              <label className="form-field-label" htmlFor="location">Location</label>
+              <input 
+                value={fields.location} 
+                id="location" 
+                type='text' 
+                placeholder="Arizona, U.S." 
+                onChange={(event)=> setFields({...fields, location: event.target.value})}
+              />
+          </div>
+            {listOfFields[0].fieldName === "Company Name" &&(
+              <div className="field-wrapper flex">
+                <label className="form-field-label" htmlFor="description">Company Description</label>
+                <textarea 
+                  value={fields.description || ""} 
+                  id="description" 
+                  placeholder="Enter a descriptio of experience" 
+                  onChange={(event)=> setFields({...fields, description: event.target.value})}
+                />
+              </div>
+            )}
+          <div className="form-action-buttons-container flex">
+            <button className="delete-resume-button delete-form-button flex rounded">
+              <img className='icon' src="./public/delete-red.svg" alt="" />
+              <p className="delete" onClick={deleteExperienceObject}>Delete</p>
+            </button>
+            <div className="delete-and-save-div flex">
+                <button className="display-resume-button cancelBtn" onClick={hideForm}>Cancel</button>
+                <button className="display-resume-button saveBtn" type="submit">Save</button>
+            </div>
+          </div>
+        </form>
+       
+      </div>
+    )
+  }
+  
+  
+  export default ResumeFields

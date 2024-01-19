@@ -1,23 +1,37 @@
 import "../Styles/Resume.css"
 
 
-function Resume(experienceObjectList=[]){
+function Resume({experienceObjectList=[]}){
     return (
         <div className="resume-wrapper white-background">
             <PersonalInfo/>
             <div className="experiences-section-wrapper flex">
                 <div className="section-header-div">
-                    <h2>Education</h2>
+                    <h2 className="section-title">Education</h2>
                 </div>
-                <ExperienceInfo/>
+                {experienceObjectList.map(experienceObject => {
+                    return(
+                        <div key={experienceObject.id} className="details-wrapper flex">
+                            {experienceObject["experience type"].toLocaleLowerCase() === "education" &&
+                                <ExperienceInfo
+                                    expObj = {experienceObject}
+                                />
+                            }
+                        </div>
+                )})}
                 <div className="section-header-div">
-                    <h2>Professional Experience</h2>
+                    <h2 className="section-title">Work Experience</h2>
                 </div>
-                <ExperienceInfo/>
-                <div className="section-header-div">
-                    <h2>Volunteer Experience</h2>
-                </div>
-                <ExperienceInfo/>
+                {experienceObjectList.map(experienceObject => {
+                    return(
+                        <div key={experienceObject.id} className="details-wrapper flex">
+                            {experienceObject["experience type"].toLocaleLowerCase() !== "education" &&
+                                <ExperienceInfo
+                                    expObj = {experienceObject}
+                                />
+                            }
+                        </div>
+                )})}            
             </div>
         </div>
     )
@@ -45,22 +59,22 @@ function PersonalInfo(){
     )
 }
 
-function ExperienceInfo(){
+function ExperienceInfo({expObj=[]}){
     return(
         <div className="experience-wrapper grid">
             <div className="date-and-location-wrapper">
-                <p className="date-info">Lorem ipsum</p>
-                <p className="location-info">Lorem ipsum</p>
+                <p className="date-info">{expObj["startDate"]} - {expObj["endDate"]}</p>
+                <p className="location-info">{expObj.location}</p>
             </div>
             <div className="experience-details-wrapper">
-                <p className="experience-name">Lorem ipsum</p>
-                <p className="experience-position">Lorem ipsum</p>
-                <p className="experience-description">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure 
-                    dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                </p>
+                <p className="experience-name">{expObj["experience name"]}</p>
+                {expObj["experience type"].toLocaleLowerCase() !== "education" &&  
+                <div className="position-and-desc-wrapper">
+                    <p className="experience-position">{expObj["Position Title"]}</p>
+                    <p className="experience-description">{expObj.description}</p>                        
+                </div>
+                }
+                <p className="experience-position">{expObj["Degree"]}</p>   
             </div>
         </div>
     )

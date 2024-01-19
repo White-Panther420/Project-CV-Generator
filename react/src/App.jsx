@@ -53,36 +53,48 @@ function App() {
       },
     ]
   )
+  const [personalDetailsObject, setPersonalDetails] = useState({
+    "Full Name": "Abel Haddis",
+    Email: "abelhaddisbusiness@gmail.com",
+    "Phone Number": "555-555-5555",
+    Location: "Arizona U.S."
+  })
 
-  const updateExpObjList = (propertyName="", propertyValue="", currEditedExperienceObj='') =>{
+  const updateExpObjList = (currEditedExperienceObj='') =>{
     console.log("UPDATE EXP")
     console.log(currEditedExperienceObj)
-    console.log({propertyName, propertyValue})
     let updatedExperienceList
+    let isFound = false;
     setExperienceObjectList(prevExperienceList => {
       console.log("PREEEV")
       console.log(prevExperienceList)
       updatedExperienceList = prevExperienceList.map((expObj) => {
+        console.log("COMPARISON")
+        console.log(currEditedExperienceObj)
+        console.log(expObj)
         // Compare objects based on specific properties
-        if (
-          currEditedExperienceObj["experience name"] === expObj["experience name"] &&
-          currEditedExperienceObj["experience type"] === expObj["experience type"]
-        ) {
-          // If this is the edited experience, update the specific property
-          return { ...expObj, [propertyName]: propertyValue };
+        if (currEditedExperienceObj.id === expObj.id){
+          console.log("YAYAYY")
+          isFound = true;
+          // If this is the edited experience, update the object
+          expObj = {...currEditedExperienceObj};
+          return { 
+            ...expObj, 
+            "experience name": currEditedExperienceObj["School"] || currEditedExperienceObj["Company Name"]
+          };
         }
         // If not the edited experience, keep the object as it is
         return expObj;
       });
-  
+      
+      if(!isFound){
+        updatedExperienceList.push(currEditedExperienceObj)
+      }
       console.log("Updated Experience List:");
       console.log(updatedExperienceList);
   
       return updatedExperienceList;
     })
-
-  
-  
   }
 
   return <div className='app-div flex'>
@@ -91,9 +103,12 @@ function App() {
                 <ResumeDetais 
                   experienceObjectList = {experienceObjectList}
                   updateExpObjList = {updateExpObjList}
+                  personalDetailsObject = {personalDetailsObject}
+                  updatePersonalDetails = {setPersonalDetails}
                 />
                 <Resume
                   experienceObjectList = {experienceObjectList}
+                  personalDetailsObject = {personalDetailsObject}
                 />
               </div>
           </div>
@@ -114,7 +129,7 @@ function ResumeSettings(){
   )
 }
 
-function ResumeDetais({experienceObjectList=[], updateExpObjList}){
+function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetailsObject=[], updatePersonalDetails}){
   console.log("RESUME DETAILS")
   console.log(experienceObjectList)
   console.log(updateExpObjList)
@@ -132,6 +147,8 @@ function ResumeDetais({experienceObjectList=[], updateExpObjList}){
       <ResumeFields 
         experienceObjectList={experienceObjectList} 
         updateExpObjList={updateExpObjList}
+        personalDetailsObject = {personalDetailsObject}
+        updatePersonalDetails = {updatePersonalDetails}
       />
     </div>
   )
