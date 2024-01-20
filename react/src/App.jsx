@@ -133,6 +133,7 @@ function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetail
   console.log("RESUME DETAILS")
   console.log(experienceObjectList)
   console.log(updateExpObjList)
+  console.log(personalDetailsObject)
   return (
     <div className="resume-details-wrapper flex">
       <div className="display-resume-settings-wrapper flex white-background rounded">

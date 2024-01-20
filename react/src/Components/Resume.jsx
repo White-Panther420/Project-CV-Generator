@@ -1,10 +1,12 @@
 import "../Styles/Resume.css"
 
 
-function Resume({experienceObjectList=[]}){
+function Resume({experienceObjectList=[], personalDetailsObject=[]}){
     return (
         <div className="resume-wrapper white-background">
-            <PersonalInfo/>
+            <PersonalInfo
+                personalDetailsObject = {personalDetailsObject}
+            />
             <div className="experiences-section-wrapper flex">
                 <div className="section-header-div">
                     <h2 className="section-title">Education</h2>
@@ -37,24 +39,34 @@ function Resume({experienceObjectList=[]}){
     )
 }
 
-function PersonalInfo(){
+function PersonalInfo({personalDetailsObject=[]}){
     return(
         <div className="personal-info-header flex">
-            <h1>Header</h1>
+            <h1>{personalDetailsObject["Full Name"]}</h1>
             <div className="contact-info-wrapper flex">
-                <div className="info-container flex">
-                    <img className="icon" src="./public/email-black.svg" alt="email" />
-                    <p className="contact-info">Lorem ipsum</p>
-                </div>
-                <div className="info-container flex">
-                    <img src="./public/phone-black.svg" alt="phone" className="icon" />
-                    <p className="contact-info">Lorem ipsum</p>
-                </div>
-                <div className="info-container flex">
-                    <img src="./public/location-black.svg" alt="location" className="icon" />
-                    <p className="contact-info">Lorem ipsum</p>
-                </div>
+                <InfoContainer
+                    infoType = {"email"}
+                    infoValue = {personalDetailsObject["Email"]}
+                />
+                <InfoContainer
+                    infoType = {"phone"}
+                    infoValue = {personalDetailsObject["Phone Number"]}
+                />
+                <InfoContainer
+                    infoType = {"location"}
+                    infoValue = {personalDetailsObject["Location"]}
+                />
             </div>
+        </div>
+    )
+}
+
+function InfoContainer({infoType, infoValue}){
+    console.log("INFO TYPE: " + infoType)
+    return(
+        <div className="info-container flex">
+            <img className="icon" src={`./public/${infoType}-black.svg`} alt={infoType}/>
+            <p className="contact-info">{infoValue}</p>
         </div>
     )
 }

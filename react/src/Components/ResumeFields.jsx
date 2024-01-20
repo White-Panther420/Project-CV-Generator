@@ -5,8 +5,9 @@ import uniqid from 'uniqid';
 
 
 
-function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetailsObject, updatePersonalDetails}) {
+function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetailsObject=[], updatePersonalDetails}) {
   //This will hold all the different experiences (i.e. education, work, volunteer)
+  console.log(personalDetailsObject)
   return (
     <div className="fields-wrapper flex">
       <PersonalDetails 
@@ -28,15 +29,25 @@ function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetail
 }
 
 function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
-  const [values, setValues] = useState({personalDetailsObject})
+  const [values, setValues] = useState(personalDetailsObject)
+  const handleCancel = (event) => {
+    event.preventDefault();
+    // Set all properties of values state to be blank
+    const blankValues = Object.fromEntries(Object.keys(values).map(key => [key, ""]));
+    setValues(blankValues);
+  };
+  const handleSubmit = (event)=>{
+    event.preventDefault();
+    updatePersonalDetails(values)
+  }
 
     return( 
               <div className="personal-details-wrapper flex white-background rounded">
                 <h2 className="form-header">Personal Details</h2>
-                <form className="personal-details-form flex">
+                <form className="personal-details-form flex" onSubmit={handleSubmit}>
                   <label className='personal-details-form-frield' htmlFor="fullName">Full name</label>
                   <input 
-                    value={personalDetailsObject["Full Name"]} 
+                    value={values["Full Name"]} 
                     id='fullName' 
                     type='text' 
                     placeholder='John Doe'
@@ -45,7 +56,7 @@ function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
 
                   <label className='personal-details-form-frield' htmlFor="email">Email <span className='recommended'>(recommended)</span></label>
                   <input 
-                    value={personalDetailsObject["Email"]} 
+                    value={values["Email"]} 
                     id='email' 
                     type='email' 
                     placeholder='example@gmail.com'
@@ -54,7 +65,7 @@ function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
 
                   <label className='personal-details-form-frield' htmlFor="phone">Phone number <span className='recommended'>(recommended)</span></label>
                   <input 
-                    value={personalDetailsObject["Phone Number"]} 
+                    value={values["Phone Number"]} 
                     id='phone' 
                     type='phone' 
                     placeholder='(555)-555-5555'
@@ -63,12 +74,16 @@ function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
 
                   <label className='personal-details-form-frield' htmlFor="location">Location <span className='recommended'>(recommended)</span></label>
                   <input 
-                    value={personalDetailsObject["Location"]} 
+                    value={values["Location"]} 
                     id='location' 
                     type='text' 
                     placeholder='Arizona, U.S.'
                     onChange={(event) => setValues({...values, "Location": event.target.value})}
                   />
+                  <div className="form-action-buttons-container flex">
+                    <button className="display-resume-button cancelBtn" onClick={handleCancel}>Cancel</button>
+                    <button className="display-resume-button saveBtn" type="submit">Save</button>
+                  </div>
                 </form>
               </div>
     )
