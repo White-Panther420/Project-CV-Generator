@@ -5,7 +5,7 @@ import uniqid from 'uniqid';
 
 
 
-function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetailsObject=[], updatePersonalDetails}) {
+function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetailsObject=[], updatePersonalDetails, deleteFromExpObjList, changeExpObjVisibility}) {
   //This will hold all the different experiences (i.e. education, work, volunteer)
   console.log(personalDetailsObject)
   return (
@@ -18,11 +18,15 @@ function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetail
         title="Education"
         experienceObjectList={experienceObjectList}
         updateExpObjList={updateExpObjList}
+        deleteFromExpObjList = {deleteFromExpObjList}
+        changeExpObjVisibility = {changeExpObjVisibility}
       />
       <ExperienceContainer 
         title="Work Experience"
         experienceObjectList={experienceObjectList}
         updateExpObjList={updateExpObjList}
+        deleteFromExpObjList = {deleteFromExpObjList}
+        changeExpObjVisibility = {changeExpObjVisibility}
       />
     </div>
   )
@@ -89,7 +93,7 @@ function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
     )
 }
 
-function ExperienceContainer({title="education", experienceObjectList=[], updateExpObjList}){
+function ExperienceContainer({title="education", experienceObjectList=[], updateExpObjList, deleteFromExpObjList, changeExpObjVisibility}){
   //Indicates if the container pannel has been clicked
   const [isClicked, setIsClicked] = useState(false)
   //Indicates if the form is open 
@@ -171,6 +175,7 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
                 setCurrEditExp={updateCurrEditedExpProperty}
                 currFormState={addForm} 
                 updateExpObjList={updateExpObjList}
+                deleteFromExpObjList = {deleteFromExpObjList}
                 onHideForm = {() => setFormIsActive(false)}>
              </Form>
             }
@@ -185,6 +190,8 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
                   <ExperienceCard 
                     key={experienceObject.id} 
                     experienceName={experienceObject["experience name"]} 
+                    experienceObject = {experienceObject}
+                    changeExpObjVisibility = {changeExpObjVisibility}
                     showEditForm={() => { 
                       setFormIsActive(true), 
                       setAddForm(false),
@@ -205,19 +212,17 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
   )
 }
 
-function ExperienceCard({experienceName="", showEditForm}){
-  const [isVisible, setIsVisible] = useState(true)
-
+function ExperienceCard({experienceName="", experienceObject, showEditForm, changeExpObjVisibility}){
   const changeExperienceVisibility = (event) =>{
     event.stopPropagation()
-    setIsVisible(!isVisible);
+    changeExpObjVisibility(experienceObject)
   }
 
   const displayEditForm = () =>{
     showEditForm()
   }
 
-  const iconSrc = isVisible ? "./public/visible-black.svg" : "./public/hidden-black.svg"
+  const iconSrc = experienceObject.visibility ? "./public/visible-black.svg" : "./public/hidden-black.svg"
 
   return (
       <div className="experience-card flex white-background" onClick={displayEditForm}>
@@ -227,7 +232,7 @@ function ExperienceCard({experienceName="", showEditForm}){
   )
 }
 
-function Form({listOfFields="", onHideForm, currEditedExperience, experienceType, setCurrEditExp, currFormState, updateExpObjList}){
+function Form({listOfFields="", onHideForm, currEditedExperience, experienceType, currFormState, updateExpObjList, deleteFromExpObjList}){
     const field1 = listOfFields[0].fieldName
     const field2 = listOfFields[1].fieldName
     //If we have an add form or invalid experience object, set input fields to blank
@@ -257,8 +262,10 @@ function Form({listOfFields="", onHideForm, currEditedExperience, experienceType
       e.preventDefault()
     }
   
-    const deleteExperienceObject = () => {
-  
+    const deleteExperienceObject = (e) => {
+      e.preventDefault()
+      deleteFromExpObjList(fields)
+      hideForm()
     }
   
     return (
@@ -321,9 +328,9 @@ function Form({listOfFields="", onHideForm, currEditedExperience, experienceType
               </div>
             )}
           <div className="form-action-buttons-container flex">
-            <button className="delete-resume-button delete-form-button flex rounded">
+            <button className="delete-resume-button delete-form-button flex rounded" onClick={deleteExperienceObject}>
               <img className='icon' src="./public/delete-red.svg" alt="" />
-              <p className="delete" onClick={deleteExperienceObject}>Delete</p>
+              <p className="delete">Delete</p>
             </button>
             <div className="delete-and-save-div flex">
                 <button className="display-resume-button cancelBtn" onClick={hideForm}>Cancel</button>

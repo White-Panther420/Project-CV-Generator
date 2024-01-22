@@ -16,7 +16,8 @@ function App() {
         location: "Arizona, U.S.",
         Description: "",
         "experience name": "Glendale Community College",
-        "experience type": "education"
+        "experience type": "education",
+        visibility: true
       },
       {
         id: uniqid(),
@@ -27,7 +28,8 @@ function App() {
         location: "Arizona, U.S.",
         Description: "",
         "experience name": "Arizona State University",
-        "experience type": "education"
+        "experience type": "education",
+        visibility: true
       },
       {
         id: uniqid(),
@@ -38,7 +40,8 @@ function App() {
         location: "Arizona, U.S.",
         description: "The tasks involved updating the content of web pages featuring lists of W. P. Carey events using HTML to provide accurate and timely information for students and community members. Additionally, a calling campaign and LinkedIn audits were conducted to gather undergraduate student employment outcomes, resulting in a notable increase of over 15% in responses from 2021 to 2022. Furthermore, I played a role in facilitating student check-ins for career advising appointments by effectively communicating with career coaches. These efforts aimed to enhance the overall experience and engagement for students within the academic and career services sphere.",
         "experience name": "Arizona State University",
-        "experience type": "work experience"
+        "experience type": "work experience",
+        visibility: true
       },
       {
         id: uniqid(),
@@ -49,7 +52,8 @@ function App() {
         location: "Arizona, U.S.",
         description: "As a team member in the Career Services department from October 2018 to December 2020, I assisted over 20,000 students and community members with job-related activities, including the federal work-study process and resume and cover letter reviews. My role extended to promoting Career Services workshops and job fairs through marketing initiatives, event preparations, and onsite duties. I handled main phone line inquiries, greeted visitors professionally, and supported various office projects such as researching job trends and internships. Additionally, I contributed to data entry for weekly computer usage and department visits. Acting as a liaison, I reached out to student clubs to present career-related topics, and I organized bi-weekly tabling events to promote Career Services and encourage resource utilization among students.",
         "experience name": "Glendale Community College",
-        "experience type": "work experience"
+        "experience type": "work experience",
+        visibility: true
       },
     ]
   )
@@ -97,6 +101,30 @@ function App() {
     })
   }
 
+  const deleteFromExpObjList = (expObjToDelete) =>{
+    setExperienceObjectList(prevExperienceList => {
+      //Filters everything into new array that is not equal to the id of the obj we want to delete
+      let newExpList = prevExperienceList.filter(obj => obj.id !== expObjToDelete.id)
+      console.log("DELETING . . .")
+      console.log(newExpList)
+      return newExpList
+    })
+  }
+
+  const changeExpObjVisibility = (expObjToChangeVisibility) => {
+    setExperienceObjectList(prevExperienceList => {
+      let updatedExperienceList = prevExperienceList.map((expObj) => {
+        let expVisibility = expObj.visibility
+        // Compare objects based on specific properties
+        if (expObjToChangeVisibility.id === expObj.id)
+        {
+          return{...prevExperienceList, visibility: !expVisibility}
+        }
+      })
+    return updatedExperienceList
+    })
+  }
+
   return <div className='app-div flex'>
             <div className="content-wrapper grid">
                 <ResumeSettings/>
@@ -105,6 +133,8 @@ function App() {
                   updateExpObjList = {updateExpObjList}
                   personalDetailsObject = {personalDetailsObject}
                   updatePersonalDetails = {setPersonalDetails}
+                  deleteFromExpObjList = {deleteFromExpObjList}
+                  changeExpObjVisibility = {changeExpObjVisibility}
                 />
                 <Resume
                   experienceObjectList = {experienceObjectList}
@@ -129,7 +159,7 @@ function ResumeSettings(){
   )
 }
 
-function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetailsObject=[], updatePersonalDetails}){
+function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetailsObject=[], updatePersonalDetails, deleteFromExpObjList, changeExpObjVisibility}){
   console.log("RESUME DETAILS")
   console.log(experienceObjectList)
   console.log(updateExpObjList)
@@ -150,6 +180,8 @@ function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetail
         updateExpObjList={updateExpObjList}
         personalDetailsObject = {personalDetailsObject}
         updatePersonalDetails = {updatePersonalDetails}
+        deleteFromExpObjList = {deleteFromExpObjList}
+        changeExpObjVisibility = {changeExpObjVisibility}
       />
     </div>
   )

@@ -15,6 +15,7 @@ function Resume({experienceObjectList=[], personalDetailsObject=[]}){
                     return(
                         <div key={experienceObject.id} className="details-wrapper flex">
                             {experienceObject["experience type"].toLocaleLowerCase() === "education" &&
+                                experienceObject.visbility === true &&
                                 <ExperienceInfo
                                     expObj = {experienceObject}
                                 />
@@ -28,6 +29,7 @@ function Resume({experienceObjectList=[], personalDetailsObject=[]}){
                     return(
                         <div key={experienceObject.id} className="details-wrapper flex">
                             {experienceObject["experience type"].toLocaleLowerCase() !== "education" &&
+                                experienceObject.visbility === true &&
                                 <ExperienceInfo
                                     expObj = {experienceObject}
                                 />
@@ -44,18 +46,24 @@ function PersonalInfo({personalDetailsObject=[]}){
         <div className="personal-info-header flex">
             <h1>{personalDetailsObject["Full Name"]}</h1>
             <div className="contact-info-wrapper flex">
+                {personalDetailsObject["Email"] !== "" && 
                 <InfoContainer
                     infoType = {"email"}
                     infoValue = {personalDetailsObject["Email"]}
                 />
+                }
+                {personalDetailsObject["Phone Number"] !== "" && 
                 <InfoContainer
                     infoType = {"phone"}
                     infoValue = {personalDetailsObject["Phone Number"]}
                 />
+                }
+                {personalDetailsObject["Location"] !== "" && 
                 <InfoContainer
                     infoType = {"location"}
                     infoValue = {personalDetailsObject["Location"]}
                 />
+                }
             </div>
         </div>
     )
