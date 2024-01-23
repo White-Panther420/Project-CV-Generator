@@ -2,6 +2,8 @@ import "../Styles/Resume.css"
 
 
 function Resume({experienceObjectList=[], personalDetailsObject=[]}){
+    console.log("INSIDE RESUME COMPONENT")
+    console.log(experienceObjectList)
     return (
         <div className="resume-wrapper white-background">
             <PersonalInfo
@@ -15,7 +17,7 @@ function Resume({experienceObjectList=[], personalDetailsObject=[]}){
                     return(
                         <div key={experienceObject.id} className="details-wrapper flex">
                             {experienceObject["experience type"].toLocaleLowerCase() === "education" &&
-                                experienceObject.visbility === true &&
+                                experienceObject.visibility &&
                                 <ExperienceInfo
                                     expObj = {experienceObject}
                                 />
@@ -29,7 +31,7 @@ function Resume({experienceObjectList=[], personalDetailsObject=[]}){
                     return(
                         <div key={experienceObject.id} className="details-wrapper flex">
                             {experienceObject["experience type"].toLocaleLowerCase() !== "education" &&
-                                experienceObject.visbility === true &&
+                                experienceObject.visibility &&
                                 <ExperienceInfo
                                     expObj = {experienceObject}
                                 />

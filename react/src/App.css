@@ -83,6 +83,10 @@
     color: #fb3737;
 }
 
+.delete-resume-button:hover{
+    background-color: rgb(225, 225, 225);
+}
+
 .delete-resume-button,
 .display-resume-button{
     border: none;
@@ -90,4 +94,8 @@
     width: 50%;
 
     padding: 6px;
+}
+
+.display-resume-button:hover{
+    background-color: rgb(225, 225, 225);
 }

@@ -129,6 +129,10 @@ textarea{
     border: none;
 }
 
+.saveBtn:hover{
+    background-color: #0048ff;
+}
+
 .experience-card{
     align-items: center;
     justify-content: space-between;

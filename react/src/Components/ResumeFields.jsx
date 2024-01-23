@@ -34,6 +34,10 @@ function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetail
 
 function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
   const [values, setValues] = useState(personalDetailsObject)
+  // We check this when we toggle the resume template to ensure values is blank
+  if (values !== personalDetailsObject) {
+    setValues(personalDetailsObject);
+  }
   const handleCancel = (event) => {
     event.preventDefault();
     // Set all properties of values state to be blank
@@ -222,6 +226,8 @@ function ExperienceCard({experienceName="", experienceObject, showEditForm, chan
     showEditForm()
   }
 
+  console.log("EXP OBJ VIS")
+  console.log(experienceObject.visibility)
   const iconSrc = experienceObject.visibility ? "./public/visible-black.svg" : "./public/hidden-black.svg"
 
   return (
@@ -257,6 +263,7 @@ function Form({listOfFields="", onHideForm, currEditedExperience, experienceType
       console.log(currEditedExperience)
       fields["experience name"] = fields[field1]
       fields["experience type"] = experienceType;
+      fields.visibility = true
       updateExpObjList(fields)
       hideForm()
       e.preventDefault()
