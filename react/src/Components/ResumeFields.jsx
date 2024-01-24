@@ -34,10 +34,7 @@ function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetail
 
 function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
   const [values, setValues] = useState(personalDetailsObject)
-  // We check this when we toggle the resume template to ensure values is blank
-  if (values !== personalDetailsObject) {
-    setValues(personalDetailsObject);
-  }
+  
   const handleCancel = (event) => {
     event.preventDefault();
     // Set all properties of values state to be blank

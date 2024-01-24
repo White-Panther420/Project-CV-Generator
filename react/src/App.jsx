@@ -55,7 +55,6 @@ let preMadeExperienceObjectList = [
       visibility: true
     },
   ]
-
   let emptyExperienceObjectList = [{
     id: "",
     "Company Name": "",
@@ -68,14 +67,12 @@ let preMadeExperienceObjectList = [
     "experience type": "",
     visibility: false
   }]
-  
   let preMadePersonalDetailsObject = {
     "Full Name": "Abel Haddis",
     Email: "abelhaddisbusiness@gmail.com",
     "Phone Number": "555-555-5555",
     Location: "Arizona U.S."
   }
-
   let emptyPersonalDetailsObejct = {
     "Full Name": "",
     Email: "",
@@ -85,6 +82,7 @@ let preMadeExperienceObjectList = [
 
   const [experienceObjectList, setExperienceObjectList] = useState(preMadeExperienceObjectList)
   const [personalDetailsObject, setPersonalDetails] = useState(preMadePersonalDetailsObject)
+  const [customize, setCustomize] = useState(false)
 
   const updateExpObjList = (currEditedExperienceObj='') =>{
     console.log("UPDATE EXP")
@@ -164,32 +162,94 @@ let preMadeExperienceObjectList = [
 
   return <div className='app-div flex'>
             <div className="content-wrapper grid">
-                <ResumeSettings/>
-                <ResumeDetais 
-                  experienceObjectList = {experienceObjectList}
-                  updateExpObjList = {updateExpObjList}
-                  toggleResumeTemplate = {toggleResumeTemplate}
-                  personalDetailsObject = {personalDetailsObject}
-                  updatePersonalDetails = {setPersonalDetails}
-                  deleteFromExpObjList = {deleteFromExpObjList}
-                  changeExpObjVisibility = {changeExpObjVisibility}
-                />
-                <Resume
-                  experienceObjectList = {experienceObjectList}
-                  personalDetailsObject = {personalDetailsObject}
-                />
+              <ResumeSettings
+                setCustomize = {setCustomize}
+              /> 
+              {!customize ? 
+                <>
+                  <ResumeDetais 
+                    experienceObjectList = {experienceObjectList}
+                    updateExpObjList = {updateExpObjList}
+                    toggleResumeTemplate = {toggleResumeTemplate}
+                    personalDetailsObject = {personalDetailsObject}
+                    updatePersonalDetails = {setPersonalDetails}
+                    deleteFromExpObjList = {deleteFromExpObjList}
+                    changeExpObjVisibility = {changeExpObjVisibility}
+                  /> 
+                </> :
+                <>
+                  <div>
+                    <ResumeTemplateSettings></ResumeTemplateSettings>
+                    <div className="layout-content-wrapper">
+                      <div className="layout-section rounded white-background">
+                        <h2>Layout</h2>
+                        <div className="layout-types-wrapper flex">
+                          <div className="layout-option-wrapper">
+                            <div className="layout-option rounded white-background top">
+                              <div className="accent-color-div"></div>
+                            </div>
+                            <p className="option-name">Top</p>
+                          </div>
+                          <div className="layout-option-wrapper">
+                            <div className="layout-option rounded white-background flex left">
+                              <div className="accent-color-div"></div>
+                            </div>
+                            <p className="option-name">Left</p>
+                          </div>
+                          <div className="layout-option-wrapper">
+                            <div className="layout-option rounded white-background flex right">
+                              <div className="accent-color-div"></div>
+                            </div>
+                            <p className="option-name">Right</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="accent-color-section-wrapper">
+                        <h2>Color</h2>
+                        <div className="color-setting-wrapper flex">
+                          <p>Accent color</p>
+                          <button className='accent-color-button'></button>
+                        </div>
+                      </div>
+
+                      <div className="font-section-wrapper">
+                        <h2>Fonts</h2>
+                        <div className="font-options-wrapper">
+                          <div className="font-option">
+                            <p className="font-sample"></p>
+                            <p className="font-name"></p>
+                          </div>
+                          <div className="font-option">
+                            <p className="font-sample"></p>
+                            <p className="font-name"></p>
+                          </div>
+                          <div className="font-option">
+                            <p className="font-sample"></p>
+                            <p className="font-name"></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              }
+              <Resume
+                experienceObjectList = {experienceObjectList}
+                personalDetailsObject = {personalDetailsObject}
+              />         
               </div>
           </div>
 }
 
-function ResumeSettings(){
+function ResumeSettings({setCustomize}){
   return(
           <div className="resume-settings-wrapper white-background rounded">
-              <button className="content flex rounded">
+              <button className="content flex rounded" onClick={() => setCustomize(false)}>
                 <img className='icon' src="./public/resume.svg" alt="" />
                 <p>Content</p>
               </button>
-              <button className="customize flex rounded">
+              <button className="customize flex rounded" onClick={() => setCustomize(true)}>
                 <img className='icon' src="./public/maintanance.svg" alt="" />
                 <p>Customize</p>  
               </button>
@@ -204,15 +264,7 @@ function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetail
   console.log(personalDetailsObject)
   return (
     <div className="resume-details-wrapper flex">
-      <div className="display-resume-settings-wrapper flex white-background rounded">
-        <button className="delete-resume-button flex rounded" onClick={() => toggleResumeTemplate(true)}>
-            <img className='icon' src="./public/delete-red.svg" alt="" />
-            <p className="delete">Clear resume</p>
-        </button>
-        <button className="display-resume-button rounded" onClick={() => toggleResumeTemplate(false)}>
-            <p className="display">Load example</p>
-        </button>
-      </div>
+      <ResumeTemplateSettings></ResumeTemplateSettings>
       <ResumeFields 
         experienceObjectList={experienceObjectList} 
         updateExpObjList={updateExpObjList}
@@ -225,4 +277,18 @@ function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetail
   )
 }
 
+
+function ResumeTemplateSettings(){
+  return(
+    <div className="display-resume-settings-wrapper flex white-background rounded">
+    <button className="delete-resume-button flex rounded" onClick={() => toggleResumeTemplate(true)}>
+        <img className='icon' src="./public/delete-red.svg" alt="" />
+        <p className="delete">Clear resume</p>
+    </button>
+    <button className="display-resume-button rounded" onClick={() => toggleResumeTemplate(false)}>
+        <p className="display">Load example</p>
+    </button>
+  </div>
+  )
+}
 export default App

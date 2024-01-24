@@ -17,7 +17,7 @@
 }
 
 .content-wrapper{
-    grid-template-columns: 100px 0.6fr 1fr;
+    grid-template-columns: 120px 0.6fr 1fr;
     gap: 30px;
 
     align-items: start;
@@ -51,6 +51,14 @@
     padding: 6px 18px;
 
     border: none;
+}
+
+.content:hover{
+    background-color: rgb(225, 225, 225);
+}
+
+.customize:hover{
+    background-color: rgb(225, 225, 225);
 }
 
 .icon{
@@ -98,4 +106,21 @@
 
 .display-resume-button:hover{
     background-color: rgb(225, 225, 225);
+}
+
+.layout-section{
+    padding: 30px;
+}
+
+.layout-types-wrapper{
+    gap: 15px;
+}
+
+.layout-option{
+    height: 50px;
+    width: 50px;
+
+
+    border: 1px solid black;
+    border-radius: 12px;
 }
