@@ -53,14 +53,15 @@
     border: none;
 }
 
-.content:hover{
+/*Ensuring it gets selected since components have higher specificity*/
+.resume-settings-wrapper .content:hover {
     background-color: rgb(225, 225, 225);
 }
-
-.customize:hover{
+  
+.resume-settings-wrapper .customize:hover {
     background-color: rgb(225, 225, 225);
 }
-
+  
 .icon{
     width: 18px;
     height: 18px;
@@ -108,8 +109,25 @@
     background-color: rgb(225, 225, 225);
 }
 
-.layout-section{
-    padding: 30px;
+.resume-customization-wrapper{
+    flex-direction: column;
+    gap: 20px;
+}
+
+.layout-content-wrapper{
+    flex-direction: column;
+
+    gap: 30px;
+}
+
+.layout-section,
+.accent-color-section-wrapper,
+.font-section-wrapper{
+    padding: 15px 20px 20px;
+}
+
+.customization-header{
+    margin-bottom: 10px;
 }
 
 .layout-types-wrapper{
@@ -117,10 +135,86 @@
 }
 
 .layout-option{
-    height: 50px;
-    width: 50px;
-
+    height: 45px;
+    width: 45px;
 
     border: 1px solid black;
     border-radius: 12px;
+
+    padding: 0;
+}
+
+.top > .accent-color-div{
+    height: 50%;
+    width: 100%;
+
+    background-color: black;
+
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+
+    position: relative;
+    top: -25%;
+}
+
+.left > .accent-color-div,
+.right > .accent-color-div{
+    height: 100%;
+    width: 50%;
+
+    background-color: black;
+}
+
+.left > .accent-color-div{
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.right > .accent-color-div{
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.right{
+    flex-direction: row-reverse;
+}
+
+.color-setting-wrapper{
+    gap: 20px;
+}
+
+.accent-p{
+    font-size: 18px;
+}
+
+.accent-color-button{
+    width: 25px;
+    height: 25px;
+
+    border-radius: 50%;
+
+    background-color: rgb(0, 0, 0);
+
+    box-shadow: 0px 1px 5px 1px rgba(123, 122, 122, 0.772);
+}
+
+.font-options-wrapper{
+    gap: 20px;
+}
+
+.font-option{
+    height: 75px;
+    width: 65px;
+
+    border: 1px solid black;
+    border-radius: 12px;
+}
+
+.font-sample{
+    font-size: 28px;
+    font-weight: 1000;
+}
+
+.font-name{
+    font-size: 16px;
 }

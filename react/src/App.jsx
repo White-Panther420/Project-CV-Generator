@@ -163,6 +163,7 @@ let preMadeExperienceObjectList = [
   return <div className='app-div flex'>
             <div className="content-wrapper grid">
               <ResumeSettings
+                customize = {customize}
                 setCustomize = {setCustomize}
               /> 
               {!customize ? 
@@ -178,56 +179,55 @@ let preMadeExperienceObjectList = [
                   /> 
                 </> :
                 <>
-                  <div>
+                  <div className='resume-customization-wrapper flex'>
                     <ResumeTemplateSettings></ResumeTemplateSettings>
-                    <div className="layout-content-wrapper">
+                    <div className="layout-content-wrapper flex">
                       <div className="layout-section rounded white-background">
-                        <h2>Layout</h2>
+                        <h2 className='customization-header'>Layout</h2>
                         <div className="layout-types-wrapper flex">
-                          <div className="layout-option-wrapper">
-                            <div className="layout-option rounded white-background top">
-                              <div className="accent-color-div"></div>
-                            </div>
-                            <p className="option-name">Top</p>
-                          </div>
-                          <div className="layout-option-wrapper">
-                            <div className="layout-option rounded white-background flex left">
-                              <div className="accent-color-div"></div>
-                            </div>
-                            <p className="option-name">Left</p>
-                          </div>
-                          <div className="layout-option-wrapper">
-                            <div className="layout-option rounded white-background flex right">
-                              <div className="accent-color-div"></div>
-                            </div>
-                            <p className="option-name">Right</p>
-                          </div>
+                        <div className="layout-option-wrapper">
+                          <button className="layout-option rounded white-background top">
+                            <div className="accent-color-div"></div>
+                          </button>
+                          <p className="option-name">Top</p>
+                        </div>
+                        <div className="layout-option-wrapper">
+                          <button className="layout-option rounded white-background flex left">
+                            <div className="accent-color-div"></div>
+                          </button>
+                          <p className="option-name">Left</p>
+                        </div>
+                        <div className="layout-option-wrapper">
+                          <button className="layout-option rounded white-background flex right">
+                            <div className="accent-color-div"></div>
+                          </button>
+                          <p className="option-name">Right</p>
+                        </div>
                         </div>
                       </div>
-
-                      <div className="accent-color-section-wrapper">
-                        <h2>Color</h2>
+                      <div className="accent-color-section-wrapper white-background rounded">
+                        <h2 className='customization-header'>Color</h2>
                         <div className="color-setting-wrapper flex">
-                          <p>Accent color</p>
+                          <p className='accent-p'>Accent color</p>
                           <button className='accent-color-button'></button>
                         </div>
                       </div>
 
-                      <div className="font-section-wrapper">
-                        <h2>Fonts</h2>
-                        <div className="font-options-wrapper">
-                          <div className="font-option">
-                            <p className="font-sample"></p>
-                            <p className="font-name"></p>
-                          </div>
-                          <div className="font-option">
-                            <p className="font-sample"></p>
-                            <p className="font-name"></p>
-                          </div>
-                          <div className="font-option">
-                            <p className="font-sample"></p>
-                            <p className="font-name"></p>
-                          </div>
+                      <div className="font-section-wrapper white-background rounded">
+                        <h2 className='customization-header'>Fonts</h2>
+                        <div className="font-options-wrapper flex">
+                          <button className="font-option white-background">
+                            <p className="font-sample">Aa</p>
+                            <p className="font-name">Serif</p>
+                          </button>
+                          <button className="font-option white-background rounded">
+                            <p className="font-sample">Aa</p>
+                            <p className="font-name">Sans</p>
+                          </button>
+                          <button className="font-option white-background rounded">
+                            <p className="font-sample">Aa</p>
+                            <p className="font-name">Mono</p>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -242,14 +242,30 @@ let preMadeExperienceObjectList = [
           </div>
 }
 
-function ResumeSettings({setCustomize}){
+function ResumeSettings({customize, setCustomize}){
+  const customizeButtonStyle = {
+    backgroundColor: customize ? "rgb(245, 245, 245)" : "#fff",
+    transition: "background-color 0.3s ease-in-out",
+  };
+  
+  const contentButtonStyle = {
+    backgroundColor: customize ? "#fff" : "rgb(245, 245, 245)",
+    transition: "background-color 0.3s ease-in-out",
+  };
+
   return(
           <div className="resume-settings-wrapper white-background rounded">
-              <button className="content flex rounded" onClick={() => setCustomize(false)}>
+              <button 
+                style={contentButtonStyle}
+                className="content flex rounded" 
+                onClick={() => setCustomize(false)}>
                 <img className='icon' src="./public/resume.svg" alt="" />
                 <p>Content</p>
               </button>
-              <button className="customize flex rounded" onClick={() => setCustomize(true)}>
+              <button 
+                style={customizeButtonStyle}
+                className="customize flex rounded" 
+                onClick={() => setCustomize(true)}>
                 <img className='icon' src="./public/maintanance.svg" alt="" />
                 <p>Customize</p>  
               </button>
