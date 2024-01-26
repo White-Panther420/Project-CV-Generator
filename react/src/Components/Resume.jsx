@@ -1,12 +1,13 @@
 import "../Styles/Resume.css"
 
 
-function Resume({experienceObjectList=[], personalDetailsObject=[]}){
+function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor}){
     console.log("INSIDE RESUME COMPONENT")
     console.log(experienceObjectList)
     return (
         <div className="resume-wrapper white-background">
             <PersonalInfo
+                accentColor = {accentColor}
                 personalDetailsObject = {personalDetailsObject}
             />
             <div className="experiences-section-wrapper flex">
@@ -43,9 +44,10 @@ function Resume({experienceObjectList=[], personalDetailsObject=[]}){
     )
 }
 
-function PersonalInfo({personalDetailsObject=[]}){
+function PersonalInfo({personalDetailsObject=[], accentColor}){
+    const bgColorStyle = {backgroundColor: accentColor}
     return(
-        <div className="personal-info-header flex">
+        <div style={bgColorStyle} className="personal-info-header flex">
             <h1>{personalDetailsObject["Full Name"]}</h1>
             <div className="contact-info-wrapper flex">
                 {personalDetailsObject["Email"] !== "" && 

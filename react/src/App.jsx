@@ -82,7 +82,10 @@ let preMadeExperienceObjectList = [
 
   const [experienceObjectList, setExperienceObjectList] = useState(preMadeExperienceObjectList)
   const [personalDetailsObject, setPersonalDetails] = useState(preMadePersonalDetailsObject)
+  
   const [customize, setCustomize] = useState(false)
+  const [layout, setLayout] = useState(1)
+  const [accentColor, setAccentColor] = useState("black")
 
   const updateExpObjList = (currEditedExperienceObj='') =>{
     console.log("UPDATE EXP")
@@ -179,64 +182,17 @@ let preMadeExperienceObjectList = [
                   /> 
                 </> :
                 <>
-                  <div className='resume-customization-wrapper flex'>
-                    <ResumeTemplateSettings></ResumeTemplateSettings>
-                    <div className="layout-content-wrapper flex">
-                      <div className="layout-section rounded white-background">
-                        <h2 className='customization-header'>Layout</h2>
-                        <div className="layout-types-wrapper flex">
-                        <div className="layout-option-wrapper">
-                          <button className="layout-option rounded white-background top">
-                            <div className="accent-color-div"></div>
-                          </button>
-                          <p className="option-name">Top</p>
-                        </div>
-                        <div className="layout-option-wrapper">
-                          <button className="layout-option rounded white-background flex left">
-                            <div className="accent-color-div"></div>
-                          </button>
-                          <p className="option-name">Left</p>
-                        </div>
-                        <div className="layout-option-wrapper">
-                          <button className="layout-option rounded white-background flex right">
-                            <div className="accent-color-div"></div>
-                          </button>
-                          <p className="option-name">Right</p>
-                        </div>
-                        </div>
-                      </div>
-                      <div className="accent-color-section-wrapper white-background rounded">
-                        <h2 className='customization-header'>Color</h2>
-                        <div className="color-setting-wrapper flex">
-                          <p className='accent-p'>Accent color</p>
-                          <button className='accent-color-button'></button>
-                        </div>
-                      </div>
-
-                      <div className="font-section-wrapper white-background rounded">
-                        <h2 className='customization-header'>Fonts</h2>
-                        <div className="font-options-wrapper flex">
-                          <button className="font-option white-background">
-                            <p className="font-sample">Aa</p>
-                            <p className="font-name">Serif</p>
-                          </button>
-                          <button className="font-option white-background rounded">
-                            <p className="font-sample">Aa</p>
-                            <p className="font-name">Sans</p>
-                          </button>
-                          <button className="font-option white-background rounded">
-                            <p className="font-sample">Aa</p>
-                            <p className="font-name">Mono</p>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <ResumeCustomization
+                    toggleResumeTemplate={toggleResumeTemplate}
+                    accentColor = {accentColor}
+                    setAccentColor = {setAccentColor}
+                  />
                 </>
               }
               <Resume
                 experienceObjectList = {experienceObjectList}
                 personalDetailsObject = {personalDetailsObject}
+                accentColor = {accentColor}
               />         
               </div>
           </div>
@@ -280,7 +236,9 @@ function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetail
   console.log(personalDetailsObject)
   return (
     <div className="resume-details-wrapper flex">
-      <ResumeTemplateSettings></ResumeTemplateSettings>
+      <ResumeTemplateSettings
+        toggleResumeTemplate={toggleResumeTemplate}
+      />
       <ResumeFields 
         experienceObjectList={experienceObjectList} 
         updateExpObjList={updateExpObjList}
@@ -294,17 +252,111 @@ function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetail
 }
 
 
-function ResumeTemplateSettings(){
+function ResumeTemplateSettings({toggleResumeTemplate}){
+  const [selected, setSelected] = useState(true)
+  const displayResumeTemplate = {
+    backgroundColor: selected ? "rgb(245, 245, 245)" : "#fff",
+    transition: "background-color 0.3s ease-in-out",
+  };
+  
+  const deleteResumeTemplate = {
+    backgroundColor: selected ? "#fff" : "rgb(245, 245, 245)",
+    transition: "background-color 0.3s ease-in-out",
+  };
   return(
     <div className="display-resume-settings-wrapper flex white-background rounded">
-    <button className="delete-resume-button flex rounded" onClick={() => toggleResumeTemplate(true)}>
+    <button style={deleteResumeTemplate} className="delete-resume-button flex rounded" onClick={() => {
+        toggleResumeTemplate(true)
+        setSelected(false)}}>
         <img className='icon' src="./public/delete-red.svg" alt="" />
         <p className="delete">Clear resume</p>
     </button>
-    <button className="display-resume-button rounded" onClick={() => toggleResumeTemplate(false)}>
+    <button style={displayResumeTemplate} className="display-resume-button rounded" onClick={() =>{toggleResumeTemplate(false)
+        setSelected(true)}}>
         <p className="display">Load example</p>
     </button>
   </div>
   )
 }
+
+function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor}){
+  const bgColorStyle = {
+    backgroundColor: accentColor
+  }
+
+  return(
+      <div className='resume-customization-wrapper flex'>
+      <ResumeTemplateSettings
+        toggleResumeTemplate={toggleResumeTemplate}
+      />
+      <div className="layout-content-wrapper flex">
+        <div className="layout-section rounded white-background">
+          <h2 className='customization-header'>Layout</h2>
+          <div className="layout-types-wrapper flex">
+          <div className="layout-option-wrapper">
+            <button className="layout-option rounded white-background top">
+              <div style={bgColorStyle} className="accent-color-div"></div>
+            </button>
+            <p className="option-name">Top</p>
+          </div>
+          <div className="layout-option-wrapper">
+            <button className="layout-option rounded white-background flex left">
+              <div style={bgColorStyle} className="accent-color-div"></div>
+            </button>
+            <p className="option-name">Left</p>
+          </div>
+          <div className="layout-option-wrapper">
+            <button className="layout-option rounded white-background flex right">
+              <div style={bgColorStyle} className="accent-color-div"></div>
+            </button>
+            <p className="option-name">Right</p>
+          </div>
+          </div>
+        </div>
+        <div className="accent-color-section-wrapper white-background rounded">
+          <h2 className='customization-header'>Color</h2>
+          <div className="color-setting-wrapper flex">
+            <p className='accent-p'>Accent color</p>
+            <button style={bgColorStyle} className='accent-color-button'>
+              {/*To make color picker look better*/}
+              <span 
+                id="color-front"
+                style={bgColorStyle}
+                onClick={()=>{
+                  const inputColorBtn = document.querySelector(".colorpicker")
+                  inputColorBtn.click()
+                }}
+              />
+              <input 
+                type="color" 
+                className="colorpicker" 
+                value={accentColor}
+                onChange={(e)=> setAccentColor(e.target.value)}
+              />
+            </button>
+          </div>
+        </div>
+
+        <div className="font-section-wrapper white-background rounded">
+          <h2 className='customization-header'>Fonts</h2>
+          <div className="font-options-wrapper flex">
+            <button className="font-option white-background">
+              <p className="font-sample">Aa</p>
+              <p className="font-name">Serif</p>
+            </button>
+            <button className="font-option white-background rounded">
+              <p className="font-sample">Aa</p>
+              <p className="font-name">Sans</p>
+            </button>
+            <button className="font-option white-background rounded">
+              <p className="font-sample">Aa</p>
+              <p className="font-name">Mono</p>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default App
