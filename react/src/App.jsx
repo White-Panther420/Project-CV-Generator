@@ -86,6 +86,7 @@ let preMadeExperienceObjectList = [
   const [customize, setCustomize] = useState(false)
   const [layout, setLayout] = useState(1)
   const [accentColor, setAccentColor] = useState("black")
+  const [contrastCOlor, setContrastColor] = useState("white")
 
   const updateExpObjList = (currEditedExperienceObj='') =>{
     console.log("UPDATE EXP")
@@ -144,7 +145,17 @@ let preMadeExperienceObjectList = [
     }
   }
 
-
+  //Converts ehx to rgb and changes contrast
+  const changeContrast = (backgroundHexColor) =>{
+    let rgbResult = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(backgroundHexColor);
+    let rgb = [parseInt(rgbResult[1], 16), parseInt(rgbResult[2], 16), parseInt(rgbResult[3], 16),]
+    
+    const brightness = Math.round(((parseInt(rgb[0]) * 299) +
+    (parseInt(rgb[1]) * 587) +
+    (parseInt(rgb[2]) * 114)) / 1000);
+    let contrast = (brightness > 125) ? 'black' : 'white'
+    setContrastColor(contrast);
+  }
 
   const changeExpObjVisibility = (expObjToChangeVisibility) => {
     setExperienceObjectList(prevExperienceList => {
@@ -186,6 +197,7 @@ let preMadeExperienceObjectList = [
                     toggleResumeTemplate={toggleResumeTemplate}
                     accentColor = {accentColor}
                     setAccentColor = {setAccentColor}
+                    changeContrast = {changeContrast}
                   />
                 </>
               }
@@ -193,6 +205,7 @@ let preMadeExperienceObjectList = [
                 experienceObjectList = {experienceObjectList}
                 personalDetailsObject = {personalDetailsObject}
                 accentColor = {accentColor}
+                contrastCOlor = {contrastCOlor}
               />         
               </div>
           </div>
@@ -279,7 +292,7 @@ function ResumeTemplateSettings({toggleResumeTemplate}){
   )
 }
 
-function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor}){
+function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor, changeContrast}){
   const bgColorStyle = {
     backgroundColor: accentColor
   }
@@ -331,7 +344,10 @@ function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor}
                 type="color" 
                 className="colorpicker" 
                 value={accentColor}
-                onChange={(e)=> setAccentColor(e.target.value)}
+                onChange={(e)=> {
+                  setAccentColor(e.target.value)
+                  changeContrast(e.target.value)
+                }}
               />
             </button>
           </div>
