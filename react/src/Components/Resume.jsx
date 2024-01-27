@@ -1,20 +1,80 @@
 import "../Styles/Resume.css"
 
 
-function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor, contrastCOlor}){
+function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor, contrastCOlor, layout}){
     console.log("INSIDE RESUME COMPONENT")
     console.log(experienceObjectList)
     const headerStyle = {color: accentColor}
     const headerBgStyle = {backgroundColor: contrastCOlor === "white" ? "rgb(245, 245, 245)" : "black"}
+    
+    let resumeStyle;
+    let personalDetailsHeaderStyle;
+    let contactInfoWrapperStyle;
+    let gridAreaStyle
+    switch (layout) {
+        case "top":
+            //Use default style
+            break;
+        
+        case "left":
+            resumeStyle = {
+                display: "grid",
+                gridTemplateColumns: "325px 1fr"
+            }
+            personalDetailsHeaderStyle = {
+                justifyContent: "start",
+                alignItems: "start",
+                padding: "30px",
+                marginBottom: "0"
+            }
+            contactInfoWrapperStyle = {
+                flexDirection: "column",
+                gap: "10px",
+                marginLeft: "20px",
+                marginTop: "5px"
+            }
+            break
+
+        case "right":
+            resumeStyle = {
+                display: "grid",
+                gridTemplateColumns: "1fr 325px",
+                //To reverse the columns
+                gridTemplateAreas: '"main sidebar"'
+            }
+            personalDetailsHeaderStyle = {
+                justifyContent: "start",
+                alignItems: "start",
+                padding: "30px",
+                marginBottom: "0",
+                gridArea: "sidebar"
+            }
+            gridAreaStyle = {
+                gridArea: "main"
+            }
+            contactInfoWrapperStyle = {
+                flexDirection: "column",
+                gap: "10px",
+                marginLeft: "20px",
+                marginTop: "5px"
+            }
+            break
+
+        default:
+            break;
+    }
 
     return (
-        <div className="resume-wrapper white-background">
+        <div style={resumeStyle} className="resume-wrapper white-background">
             <PersonalInfo
+                headerStyle = {personalDetailsHeaderStyle}
+                contactInfoWrapperStyle = {contactInfoWrapperStyle}
                 accentColor = {accentColor}
                 contrastCOlor={contrastCOlor}
+                layout = {layout}
                 personalDetailsObject = {personalDetailsObject}
             />
-            <div className="experiences-section-wrapper flex">
+            <div style={gridAreaStyle}  className="experiences-section-wrapper flex">
                 <div style={headerBgStyle} className="section-header-div">
                     <h2 style={headerStyle} className="section-title">Education</h2>
                 </div>
@@ -48,13 +108,14 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
     )
 }
 
-function PersonalInfo({personalDetailsObject=[], accentColor, contrastCOlor}){
-    const bgColorStyle = {backgroundColor: accentColor}
+function PersonalInfo({personalDetailsObject=[], accentColor, contrastCOlor, layout, headerStyle, contactInfoWrapperStyle}){
     const constrastStyleText = {color: contrastCOlor}
+    const newHeaderStyle = {...headerStyle, backgroundColor: accentColor}
+
     return(
-        <div style={bgColorStyle} className="personal-info-header flex">
+        <div style={newHeaderStyle}  className="personal-info-header flex">
             <h1 style={constrastStyleText}>{personalDetailsObject["Full Name"]}</h1>
-            <div className="contact-info-wrapper flex">
+            <div style={contactInfoWrapperStyle} className="contact-info-wrapper flex">
                 {personalDetailsObject["Email"] !== "" && 
                 <InfoContainer
                     infoType = {"email"}

@@ -37,7 +37,7 @@ let preMadeExperienceObjectList = [
       startDate: "09/01/2021",
       endDate: "04/14/2023",
       location: "Arizona, U.S.",
-      description: "The tasks involved updating the content of web pages featuring lists of W. P. Carey events using HTML to provide accurate and timely information for students and community members. Additionally, a calling campaign and LinkedIn audits were conducted to gather undergraduate student employment outcomes, resulting in a notable increase of over 15% in responses from 2021 to 2022. Furthermore, I played a role in facilitating student check-ins for career advising appointments by effectively communicating with career coaches. These efforts aimed to enhance the overall experience and engagement for students within the academic and career services sphere.",
+      description: "The tasks involved updating the content of web pages featuring lists of W. P. Carey events using HTML to provide accurate and timely information for students and community members. Additionally, a calling campaign and LinkedIn audits were conducted to gather undergraduate student employment outcomes, resulting in a notable increase of over 15% in responses from 2021 to 2022.",
       "experience name": "Arizona State University",
       "experience type": "work experience",
       visibility: true
@@ -49,7 +49,7 @@ let preMadeExperienceObjectList = [
       startDate: "10/15/2018",
       endDate: "01/15/2021",
       location: "Arizona, U.S.",
-      description: "As a team member in the Career Services department from October 2018 to December 2020, I assisted over 20,000 students and community members with job-related activities, including the federal work-study process and resume and cover letter reviews. My role extended to promoting Career Services workshops and job fairs through marketing initiatives, event preparations, and onsite duties. I handled main phone line inquiries, greeted visitors professionally, and supported various office projects such as researching job trends and internships. Additionally, I contributed to data entry for weekly computer usage and department visits. Acting as a liaison, I reached out to student clubs to present career-related topics, and I organized bi-weekly tabling events to promote Career Services and encourage resource utilization among students.",
+      description: "As a team member in the Career Services department from October 2018 to December 2020, I assisted over 20,000 students and community members with job-related activities, including the federal work-study process and resume and cover letter reviews. My role extended to promoting Career Services workshops and job fairs through marketing initiatives, event preparations, and onsite duties.",
       "experience name": "Glendale Community College",
       "experience type": "work experience",
       visibility: true
@@ -84,7 +84,7 @@ let preMadeExperienceObjectList = [
   const [personalDetailsObject, setPersonalDetails] = useState(preMadePersonalDetailsObject)
   
   const [customize, setCustomize] = useState(false)
-  const [layout, setLayout] = useState(1)
+  const [layout, setLayout] = useState("top")
   const [accentColor, setAccentColor] = useState("black")
   const [contrastCOlor, setContrastColor] = useState("white")
 
@@ -198,6 +198,7 @@ let preMadeExperienceObjectList = [
                     accentColor = {accentColor}
                     setAccentColor = {setAccentColor}
                     changeContrast = {changeContrast}
+                    setLayout = {setLayout}
                   />
                 </>
               }
@@ -206,6 +207,7 @@ let preMadeExperienceObjectList = [
                 personalDetailsObject = {personalDetailsObject}
                 accentColor = {accentColor}
                 contrastCOlor = {contrastCOlor}
+                layout = {layout}
               />         
               </div>
           </div>
@@ -292,7 +294,7 @@ function ResumeTemplateSettings({toggleResumeTemplate}){
   )
 }
 
-function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor, changeContrast}){
+function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor, changeContrast, setLayout}){
   const bgColorStyle = {
     backgroundColor: accentColor
   }
@@ -307,19 +309,19 @@ function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor,
           <h2 className='customization-header'>Layout</h2>
           <div className="layout-types-wrapper flex">
           <div className="layout-option-wrapper">
-            <button className="layout-option rounded white-background top">
+            <button className="layout-option rounded white-background top" onClick={() => setLayout("top")}>
               <div style={bgColorStyle} className="accent-color-div"></div>
             </button>
             <p className="option-name">Top</p>
           </div>
           <div className="layout-option-wrapper">
-            <button className="layout-option rounded white-background flex left">
+            <button className="layout-option rounded white-background flex left" onClick={() => setLayout("left")}>
               <div style={bgColorStyle} className="accent-color-div"></div>
             </button>
             <p className="option-name">Left</p>
           </div>
           <div className="layout-option-wrapper">
-            <button className="layout-option rounded white-background flex right">
+            <button className="layout-option rounded white-background flex right" onClick={() => setLayout("right")}>
               <div style={bgColorStyle} className="accent-color-div"></div>
             </button>
             <p className="option-name">Right</p>
