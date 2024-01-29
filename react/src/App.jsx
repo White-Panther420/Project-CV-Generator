@@ -87,6 +87,7 @@ let preMadeExperienceObjectList = [
   const [layout, setLayout] = useState("top")
   const [accentColor, setAccentColor] = useState("black")
   const [contrastCOlor, setContrastColor] = useState("white")
+  const [fontType, setFontType] = useState("serif")
 
   const updateExpObjList = (currEditedExperienceObj='') =>{
     console.log("UPDATE EXP")
@@ -199,6 +200,7 @@ let preMadeExperienceObjectList = [
                     setAccentColor = {setAccentColor}
                     changeContrast = {changeContrast}
                     setLayout = {setLayout}
+                    setFontType = {setFontType}
                   />
                 </>
               }
@@ -208,6 +210,7 @@ let preMadeExperienceObjectList = [
                 accentColor = {accentColor}
                 contrastCOlor = {contrastCOlor}
                 layout = {layout}
+                fontType = {fontType}
               />         
               </div>
           </div>
@@ -294,9 +297,28 @@ function ResumeTemplateSettings({toggleResumeTemplate}){
   )
 }
 
-function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor, changeContrast, setLayout}){
+function ResumeCustomization(
+  {
+    toggleResumeTemplate, 
+    accentColor, 
+    setAccentColor, 
+    changeContrast, 
+    setLayout,
+    setFontType
+  }){
   const bgColorStyle = {
     backgroundColor: accentColor
+  }
+
+  const [selecteFontOption, setSelectedFontOption] = useState(1)
+
+  const fontOptionBtnSelectedStyle = {
+    backgroundColor: "#0e374e",
+    color: "#fff"
+  }
+  const fontOptionBtnUnselectedStyle = {
+    backgroundColor: "#fff",
+    color: "#0e374e"
   }
 
   return(
@@ -358,15 +380,39 @@ function ResumeCustomization({toggleResumeTemplate, accentColor, setAccentColor,
         <div className="font-section-wrapper white-background rounded">
           <h2 className='customization-header'>Fonts</h2>
           <div className="font-options-wrapper flex">
-            <button className="font-option white-background">
+            <button 
+              style={selecteFontOption == 1 ? fontOptionBtnSelectedStyle : fontOptionBtnUnselectedStyle} 
+              className="font-option white-background" 
+              onClick={() => {
+                setFontType("serif")
+                setSelectedFontOption(1)
+                }
+              }
+            >
               <p className="font-sample">Aa</p>
               <p className="font-name">Serif</p>
             </button>
-            <button className="font-option white-background rounded">
+            <button 
+              style={selecteFontOption == 2 ? fontOptionBtnSelectedStyle : fontOptionBtnUnselectedStyle} 
+              className="font-option white-background rounded" 
+              onClick={() => {
+                setFontType("sans")
+                setSelectedFontOption(2)
+                }
+              }
+            >
               <p className="font-sample">Aa</p>
               <p className="font-name">Sans</p>
             </button>
-            <button className="font-option white-background rounded">
+            <button 
+              style={selecteFontOption == 3 ? fontOptionBtnSelectedStyle : fontOptionBtnUnselectedStyle} 
+              className="font-option white-background rounded" 
+              onClick={() => {
+                setFontType("mono")
+                setSelectedFontOption(3)
+                }
+              }
+            >
               <p className="font-sample">Aa</p>
               <p className="font-name">Mono</p>
             </button>

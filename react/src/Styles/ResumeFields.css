@@ -132,7 +132,7 @@ textarea{
 }
 
 .saveBtn:hover{
-    background-color: #0048ff;
+    background-color: #0048ff !important;
 }
 
 .experience-card{

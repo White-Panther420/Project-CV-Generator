@@ -1,7 +1,7 @@
 import "../Styles/Resume.css"
 
 
-function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor, contrastCOlor, layout}){
+function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor, contrastCOlor, layout, fontType}){
     console.log("INSIDE RESUME COMPONENT")
     console.log(experienceObjectList)
     const headerStyle = {color: accentColor}
@@ -11,15 +11,20 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
     let personalDetailsHeaderStyle;
     let contactInfoWrapperStyle;
     let gridAreaStyle
+    let experienceGridStyle
     switch (layout) {
         case "top":
             //Use default style
+            experienceGridStyle = {
+                gridTemplateColumns: "30% 1fr",
+                gap: "30px"
+            }
             break;
         
         case "left":
             resumeStyle = {
                 display: "grid",
-                gridTemplateColumns: "325px 1fr"
+                gridTemplateColumns: "325px 1fr",
             }
             personalDetailsHeaderStyle = {
                 justifyContent: "start",
@@ -33,6 +38,13 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
                 marginLeft: "20px",
                 marginTop: "5px"
             }
+            experienceGridStyle = {
+                gridTemplateColumns: "50% 1fr",
+                gap: "10px"
+            }
+            gridAreaStyle = {
+                padding: "0 30px"
+            }
             break
 
         case "right":
@@ -40,7 +52,8 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
                 display: "grid",
                 gridTemplateColumns: "1fr 325px",
                 //To reverse the columns
-                gridTemplateAreas: '"main sidebar"'
+                gridTemplateAreas: '"main sidebar"',
+                gap: "20px"
             }
             personalDetailsHeaderStyle = {
                 justifyContent: "start",
@@ -50,7 +63,8 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
                 gridArea: "sidebar"
             }
             gridAreaStyle = {
-                gridArea: "main"
+                gridArea: "main",
+                padding: "0 30px"
             }
             contactInfoWrapperStyle = {
                 flexDirection: "column",
@@ -58,11 +72,40 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
                 marginLeft: "20px",
                 marginTop: "5px"
             }
+            experienceGridStyle = {
+                gridTemplateColumns: "50% 1fr",
+                gap: "10px"
+            }
             break
 
         default:
             break;
     }
+
+    let fontStyle
+    console.log("FOONTT")
+    console.log(fontType)
+    switch (fontType) {
+        case "serif":
+            fontStyle = {
+                fontFamily: "serif"
+            }
+            break;
+        case "sans":
+            fontStyle = {
+                fontFamily: "sans-serif"
+            }
+            break;
+        case "mono":
+            fontStyle = {
+                fontFamily: "monospace"
+            }
+            break;
+        default:
+            break;
+    }
+
+    resumeStyle = {...resumeStyle, ...fontStyle}
 
     return (
         <div style={resumeStyle} className="resume-wrapper white-background">
@@ -85,6 +128,7 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
                                 experienceObject.visibility &&
                                 <ExperienceInfo
                                     expObj = {experienceObject}
+                                    expGridStyle = {experienceGridStyle}
                                 />
                             }
                         </div>
@@ -99,6 +143,7 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
                                 experienceObject.visibility &&
                                 <ExperienceInfo
                                     expObj = {experienceObject}
+                                    expGridStyle = {experienceGridStyle}
                                 />
                             }
                         </div>
@@ -154,9 +199,9 @@ function InfoContainer({infoType, infoValue, contrastCOlor}){
     )
 }
 
-function ExperienceInfo({expObj=[]}){
+function ExperienceInfo({expObj=[], expGridStyle}){
     return(
-        <div className="experience-wrapper grid">
+        <div style={expGridStyle} className="experience-wrapper grid">
             <div className="date-and-location-wrapper">
                 <p className="date-info">{expObj["startDate"]} - {expObj["endDate"]}</p>
                 <p className="location-info">{expObj.location}</p>
