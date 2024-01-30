@@ -3,9 +3,16 @@ import React, { useState } from "react";
 import "../Styles/ResumeFields.css"
 import uniqid from 'uniqid';
 
-
-
-function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetailsObject=[], updatePersonalDetails, deleteFromExpObjList, changeExpObjVisibility}) {
+function ResumeFields(
+  {
+    experienceObjectList=[], 
+    updateExpObjList, 
+    personalDetailsObject=[], 
+    updatePersonalDetails, 
+    deleteFromExpObjList, 
+    changeExpObjVisibility,
+    resumeTemplate
+  }) {
   //This will hold all the different experiences (i.e. education, work, volunteer)
   console.log(personalDetailsObject)
   return (
@@ -13,6 +20,7 @@ function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetail
       <PersonalDetails 
         personalDetailsObject = {personalDetailsObject}
         updatePersonalDetails = {updatePersonalDetails}
+        resumeTemplate = {resumeTemplate}
       />
       <ExperienceContainer 
         title="Education"
@@ -32,9 +40,20 @@ function ResumeFields({experienceObjectList=[], updateExpObjList, personalDetail
   )
 }
 
-function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){
-  const [values, setValues] = useState(personalDetailsObject)
+function PersonalDetails({personalDetailsObject=[], updatePersonalDetails, resumeTemplate}){
+  console.log("RESUME TEMPLATE STATW")
+  console.log(resumeTemplate)
+  console.log(personalDetailsObject)
+  const [values, setValues] = useState(
+    {
+      "Full Name": resumeTemplate ? personalDetailsObject["Full Name"] : "",
+      "Email": resumeTemplate ? personalDetailsObject["Email"] : "",
+      "Phone Number": resumeTemplate ? personalDetailsObject["Phone Number"] : "",
+      "Location": resumeTemplate ? personalDetailsObject["Location"] : "",
+    }
+  )
   
+  console.log(values)
   const handleCancel = (event) => {
     event.preventDefault();
     // Set all properties of values state to be blank
@@ -108,6 +127,10 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
   console.log("CURR EXP STATE")
   console.log(currEditedExperience)
 
+  const roundedStyle = {
+    borderRadius: isClicked ? "" : "18px"
+  }
+
   let fieldNameList = []
   switch (title.toLocaleLowerCase()) {
     case "education":
@@ -160,7 +183,7 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
   console.log(experienceObjectList)
   return (
       <div className="experience-container-wrapper">
-          <div className="experience-header-div flex white-background">
+          <div style={roundedStyle} className="experience-header-div flex white-background">
             <div className="header-wrapper flex" onClick={handleClick}>
               <div className="left-side-wrapper flex">
                 <img className="largerIcon" src={headerIconSrc} alt="" />

@@ -83,6 +83,7 @@ let preMadeExperienceObjectList = [
   const [experienceObjectList, setExperienceObjectList] = useState(preMadeExperienceObjectList)
   const [personalDetailsObject, setPersonalDetails] = useState(preMadePersonalDetailsObject)
   
+  const [resumeTemplate, setResumeTemplate] = useState(true)
   const [customize, setCustomize] = useState(false)
   const [layout, setLayout] = useState("top")
   const [accentColor, setAccentColor] = useState("black")
@@ -140,9 +141,11 @@ let preMadeExperienceObjectList = [
     if(emptyResume){
       setExperienceObjectList(emptyExperienceObjectList)
       setPersonalDetails(emptyPersonalDetailsObejct)
+      setResumeTemplate(false)
     }else{
       setExperienceObjectList(preMadeExperienceObjectList)
       setPersonalDetails(preMadePersonalDetailsObject)
+      setResumeTemplate(true)
     }
   }
 
@@ -191,6 +194,7 @@ let preMadeExperienceObjectList = [
                     updatePersonalDetails = {setPersonalDetails}
                     deleteFromExpObjList = {deleteFromExpObjList}
                     changeExpObjVisibility = {changeExpObjVisibility}
+                    resumeTemplate = {resumeTemplate}
                   /> 
                 </> :
                 <>
@@ -247,7 +251,17 @@ function ResumeSettings({customize, setCustomize}){
   )
 }
 
-function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetailsObject=[], updatePersonalDetails, deleteFromExpObjList, changeExpObjVisibility, toggleResumeTemplate}){
+function ResumeDetais(
+  {
+    experienceObjectList=[], 
+    updateExpObjList, 
+    personalDetailsObject=[], 
+    updatePersonalDetails, 
+    deleteFromExpObjList, 
+    changeExpObjVisibility, 
+    toggleResumeTemplate,
+    resumeTemplate
+  }){
   console.log("RESUME DETAILS")
   console.log(experienceObjectList)
   console.log(updateExpObjList)
@@ -264,6 +278,7 @@ function ResumeDetais({experienceObjectList=[], updateExpObjList, personalDetail
         updatePersonalDetails = {updatePersonalDetails}
         deleteFromExpObjList = {deleteFromExpObjList}
         changeExpObjVisibility = {changeExpObjVisibility}
+        resumeTemplate = {resumeTemplate}
       />
     </div>
   )
