@@ -2,8 +2,6 @@ import "../Styles/Resume.css"
 
 
 function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor, contrastCOlor, layout, fontType}){
-    console.log("INSIDE RESUME COMPONENT")
-    console.log(experienceObjectList)
     const headerStyle = {color: accentColor}
     const headerBgStyle = {backgroundColor: contrastCOlor === "white" ? "rgb(245, 245, 245)" : "black"}
     
@@ -43,7 +41,8 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
                 gap: "10px"
             }
             gridAreaStyle = {
-                padding: "0 30px"
+                padding: "0 30px",
+                justifyContent: "start"
             }
             break
 
@@ -64,7 +63,8 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
             }
             gridAreaStyle = {
                 gridArea: "main",
-                padding: "0 30px"
+                padding: "0 30px",
+                justifyContent: "start"
             }
             contactInfoWrapperStyle = {
                 flexDirection: "column",
@@ -83,8 +83,6 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
     }
 
     let fontStyle
-    console.log("FOONTT")
-    console.log(fontType)
     switch (fontType) {
         case "serif":
             fontStyle = {
@@ -117,7 +115,7 @@ function Resume({experienceObjectList=[], personalDetailsObject=[], accentColor,
                 layout = {layout}
                 personalDetailsObject = {personalDetailsObject}
             />
-            <div style={gridAreaStyle}  className="experiences-section-wrapper flex">
+            <div style={gridAreaStyle} className="experiences-section-wrapper flex">
                 <div style={headerBgStyle} className="section-header-div">
                     <h2 style={headerStyle} className="section-title">Education</h2>
                 </div>
@@ -189,8 +187,6 @@ function PersonalInfo({personalDetailsObject=[], accentColor, contrastCOlor, lay
 
 function InfoContainer({infoType, infoValue, contrastCOlor}){
     const constrastStyleText = {color: contrastCOlor}
-    console.log("INFO TYPE: " + infoType)
-    console.log(contrastCOlor)
     return(
         <div className="info-container flex">
             <img className="icon" src={`./public/${infoType}-${contrastCOlor}.svg`} alt={infoType}/>

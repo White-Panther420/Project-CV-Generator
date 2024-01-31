@@ -83,7 +83,6 @@ let preMadeExperienceObjectList = [
   const [experienceObjectList, setExperienceObjectList] = useState(preMadeExperienceObjectList)
   const [personalDetailsObject, setPersonalDetails] = useState(preMadePersonalDetailsObject)
   
-  const [resumeTemplate, setResumeTemplate] = useState(true)
   const [customize, setCustomize] = useState(false)
   const [layout, setLayout] = useState("top")
   const [accentColor, setAccentColor] = useState("black")
@@ -91,20 +90,12 @@ let preMadeExperienceObjectList = [
   const [fontType, setFontType] = useState("serif")
 
   const updateExpObjList = (currEditedExperienceObj='') =>{
-    console.log("UPDATE EXP")
-    console.log(currEditedExperienceObj)
     let updatedExperienceList
     let isFound = false;
     setExperienceObjectList(prevExperienceList => {
-      console.log("PREEEV")
-      console.log(prevExperienceList)
       updatedExperienceList = prevExperienceList.map((expObj) => {
-        console.log("COMPARISON")
-        console.log(currEditedExperienceObj)
-        console.log(expObj)
         // Compare objects based on specific properties
         if (currEditedExperienceObj.id === expObj.id){
-          console.log("YAYAYY")
           isFound = true;
           // If this is the edited experience, update the object
           expObj = {...currEditedExperienceObj};
@@ -120,9 +111,6 @@ let preMadeExperienceObjectList = [
       if(!isFound){
         updatedExperienceList.push(currEditedExperienceObj)
       }
-      console.log("Updated Experience List:");
-      console.log(updatedExperienceList);
-  
       return updatedExperienceList;
     })
   }
@@ -131,8 +119,6 @@ let preMadeExperienceObjectList = [
     setExperienceObjectList(prevExperienceList => {
       //Filters everything into new array that is not equal to the id of the obj we want to delete
       let newExpList = prevExperienceList.filter(obj => obj.id !== expObjToDelete.id)
-      console.log("DELETING . . .")
-      console.log(newExpList)
       return newExpList
     })
   }
@@ -141,11 +127,9 @@ let preMadeExperienceObjectList = [
     if(emptyResume){
       setExperienceObjectList(emptyExperienceObjectList)
       setPersonalDetails(emptyPersonalDetailsObejct)
-      setResumeTemplate(false)
     }else{
       setExperienceObjectList(preMadeExperienceObjectList)
       setPersonalDetails(preMadePersonalDetailsObject)
-      setResumeTemplate(true)
     }
   }
 
@@ -164,8 +148,6 @@ let preMadeExperienceObjectList = [
   const changeExpObjVisibility = (expObjToChangeVisibility) => {
     setExperienceObjectList(prevExperienceList => {
       let updatedExperienceList = prevExperienceList.map((expObj) => {
-        console.log("EXP Visibility")
-        console.log(expObj.visibility)
         let expVisibility = expObj.visibility
         // Compare objects based on specific properties
         if (expObjToChangeVisibility.id === expObj.id)
@@ -194,7 +176,6 @@ let preMadeExperienceObjectList = [
                     updatePersonalDetails = {setPersonalDetails}
                     deleteFromExpObjList = {deleteFromExpObjList}
                     changeExpObjVisibility = {changeExpObjVisibility}
-                    resumeTemplate = {resumeTemplate}
                   /> 
                 </> :
                 <>
@@ -260,12 +241,7 @@ function ResumeDetais(
     deleteFromExpObjList, 
     changeExpObjVisibility, 
     toggleResumeTemplate,
-    resumeTemplate
   }){
-  console.log("RESUME DETAILS")
-  console.log(experienceObjectList)
-  console.log(updateExpObjList)
-  console.log(personalDetailsObject)
   return (
     <div className="resume-details-wrapper flex">
       <ResumeTemplateSettings
@@ -278,7 +254,6 @@ function ResumeDetais(
         updatePersonalDetails = {updatePersonalDetails}
         deleteFromExpObjList = {deleteFromExpObjList}
         changeExpObjVisibility = {changeExpObjVisibility}
-        resumeTemplate = {resumeTemplate}
       />
     </div>
   )

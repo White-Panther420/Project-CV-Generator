@@ -22,8 +22,8 @@
 
     align-items: start;
 
-    width: 80%;
-    height: 120vh;
+    width: clamp(40vw, 1600px, 80%);
+    height: auto;
 
     margin-top: 30px;
 }

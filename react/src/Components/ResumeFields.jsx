@@ -11,16 +11,13 @@ function ResumeFields(
     updatePersonalDetails, 
     deleteFromExpObjList, 
     changeExpObjVisibility,
-    resumeTemplate
   }) {
   //This will hold all the different experiences (i.e. education, work, volunteer)
-  console.log(personalDetailsObject)
   return (
     <div className="fields-wrapper flex">
       <PersonalDetails 
         personalDetailsObject = {personalDetailsObject}
         updatePersonalDetails = {updatePersonalDetails}
-        resumeTemplate = {resumeTemplate}
       />
       <ExperienceContainer 
         title="Education"
@@ -40,29 +37,16 @@ function ResumeFields(
   )
 }
 
-function PersonalDetails({personalDetailsObject=[], updatePersonalDetails, resumeTemplate}){
-  console.log("RESUME TEMPLATE STATW")
-  console.log(resumeTemplate)
-  console.log(personalDetailsObject)
-  const [values, setValues] = useState(
-    {
-      "Full Name": resumeTemplate ? personalDetailsObject["Full Name"] : "",
-      "Email": resumeTemplate ? personalDetailsObject["Email"] : "",
-      "Phone Number": resumeTemplate ? personalDetailsObject["Phone Number"] : "",
-      "Location": resumeTemplate ? personalDetailsObject["Location"] : "",
-    }
-  )
-  
-  console.log(values)
+function PersonalDetails({personalDetailsObject=[], updatePersonalDetails}){  
   const handleCancel = (event) => {
     event.preventDefault();
     // Set all properties of values state to be blank
-    const blankValues = Object.fromEntries(Object.keys(values).map(key => [key, ""]));
-    setValues(blankValues);
+    const blankValues = Object.fromEntries(Object.keys(personalDetailsObject).map(key => [key, ""]));
+    updatePersonalDetails(blankValues);
   };
   const handleSubmit = (event)=>{
     event.preventDefault();
-    updatePersonalDetails(values)
+    updatePersonalDetails(personalDetailsObject)
   }
 
     return( 
@@ -71,38 +55,38 @@ function PersonalDetails({personalDetailsObject=[], updatePersonalDetails, resum
                 <form className="personal-details-form flex" onSubmit={handleSubmit}>
                   <label className='personal-details-form-frield' htmlFor="fullName">Full name</label>
                   <input 
-                    value={values["Full Name"]} 
+                    value={personalDetailsObject["Full Name"]} 
                     id='fullName' 
                     type='text' 
                     placeholder='John Doe'
-                    onChange={(event) => setValues({...values, "Full Name": event.target.value})}
+                    onChange={(e) => updatePersonalDetails({...personalDetailsObject, "Full Name": e.target.value})}
                   />
 
                   <label className='personal-details-form-frield' htmlFor="email">Email <span className='recommended'>(recommended)</span></label>
                   <input 
-                    value={values["Email"]} 
+                    value={personalDetailsObject["Email"]} 
                     id='email' 
                     type='email' 
                     placeholder='example@gmail.com'
-                    onChange={(event) => setValues({...values, "Email": event.target.value})}
+                    onChange={(e) => updatePersonalDetails({...personalDetailsObject, "Email": e.target.value})}
                   />
 
                   <label className='personal-details-form-frield' htmlFor="phone">Phone number <span className='recommended'>(recommended)</span></label>
                   <input 
-                    value={values["Phone Number"]} 
+                    value={personalDetailsObject["Phone Number"]} 
                     id='phone' 
                     type='phone' 
                     placeholder='(555)-555-5555'
-                    onChange={(event) => setValues({...values, "Phone Number": event.target.value})}
+                    onChange={(e) => updatePersonalDetails({...personalDetailsObject, "Phone Number": e.target.value})}
                   />
 
                   <label className='personal-details-form-frield' htmlFor="location">Location <span className='recommended'>(recommended)</span></label>
                   <input 
-                    value={values["Location"]} 
+                    value={personalDetailsObject["Location"]} 
                     id='location' 
                     type='text' 
                     placeholder='Arizona, U.S.'
-                    onChange={(event) => setValues({...values, "Location": event.target.value})}
+                    onChange={(e) => updatePersonalDetails({...personalDetailsObject, "Location": e.target.value})}
                   />
                   <div className="form-action-buttons-container flex">
                     <button className="display-resume-button cancelBtn" onClick={handleCancel}>Cancel</button>
@@ -124,8 +108,6 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
   // value of the object tied to that experience so the form can render with the values
   const [currEditedExperience, setCurrEditedExperience] = useState(null)
 
-  console.log("CURR EXP STATE")
-  console.log(currEditedExperience)
 
   const roundedStyle = {
     borderRadius: isClicked ? "" : "18px"
@@ -168,7 +150,6 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
     setIsClicked(!isClicked)
   }
   const displayForm = () =>{
-    console.log("CALLED")
     setFormIsActive(!formIsActive)
   }
   const updateCurrEditedExpProperty = (propertyName, propertyValue) =>{
@@ -177,10 +158,6 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
 
 
   const headerIconSrc = `./public/${title.toLocaleLowerCase().split(" ").join("-")}-black.svg`
-
-  console.log(`${isClicked}, ${formIsActive}, ${addForm}`)
-  console.log("WHY ARE WE HERE?")
-  console.log(experienceObjectList)
   return (
       <div className="experience-container-wrapper">
           <div style={roundedStyle} className="experience-header-div flex white-background">
@@ -207,7 +184,6 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
           {((isClicked && !formIsActive) && (
             <>
               {experienceObjectList.map(experienceObject => {
-                console.log(experienceObject)
                 return(
                   experienceObject["experience name"] !== "" && 
                   experienceObject["experience type"].toLocaleLowerCase() == title.toLocaleLowerCase() &&  
@@ -246,8 +222,6 @@ function ExperienceCard({experienceName="", experienceObject, showEditForm, chan
     showEditForm()
   }
 
-  console.log("EXP OBJ VIS")
-  console.log(experienceObject.visibility)
   const iconSrc = experienceObject.visibility ? "./public/visible-black.svg" : "./public/hidden-black.svg"
 
   return (
@@ -278,9 +252,6 @@ function Form({listOfFields="", onHideForm, currEditedExperience, experienceType
   
     //Adds new experience to list of experienceObjects when form is submitted
     const createNewExperienceObject = (e) =>{
-      console.log("SAVE FIELDS")
-      console.log(fields)
-      console.log(currEditedExperience)
       fields["experience name"] = fields[field1]
       fields["experience type"] = experienceType;
       fields.visibility = true
