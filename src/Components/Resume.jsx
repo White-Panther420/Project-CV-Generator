@@ -189,7 +189,7 @@ function InfoContainer({infoType, infoValue, contrastCOlor}){
     const constrastStyleText = {color: contrastCOlor}
     return(
         <div className="info-container flex">
-            <img className="icon" src={`../${infoType}-${contrastCOlor}.svg`} alt={infoType}/>
+            <img className="icon" src={`./${infoType}-${contrastCOlor}.svg`} alt={infoType}/>
             <p style={constrastStyleText} className="contact-info">{infoValue}</p>
         </div>
     )
