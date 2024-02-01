@@ -191,9 +191,6 @@ function InfoContainer({infoType, infoValue, contrastCOlor}){
         <div className="info-container flex">
 <<<<<<< HEAD
             <img className="icon" src={`./${infoType}-${contrastCOlor}.svg`} alt={infoType}/>
-=======
-            <img className="icon" src={`./public/${infoType}-${contrastCOlor}.svg`} alt={infoType}/>
->>>>>>> f8f2b4e92d37197d067be44853bae5ac907356c0
             <p style={constrastStyleText} className="contact-info">{infoValue}</p>
         </div>
     )
