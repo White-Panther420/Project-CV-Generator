@@ -218,14 +218,14 @@ function ResumeSettings({customize, setCustomize}){
                 style={contentButtonStyle}
                 className="content flex rounded" 
                 onClick={() => setCustomize(false)}>
-                <img className='icon' src="./public/resume.svg" alt="" />
+                <img className='icon' src="/resume.svg" alt="" />
                 <p>Content</p>
               </button>
               <button 
                 style={customizeButtonStyle}
                 className="customize flex rounded" 
                 onClick={() => setCustomize(true)}>
-                <img className='icon' src="./public/maintanance.svg" alt="" />
+                <img className='icon' src="/maintanance.svg" alt="" />
                 <p>Customize</p>  
               </button>
           </div>
@@ -276,7 +276,7 @@ function ResumeTemplateSettings({toggleResumeTemplate}){
     <button style={deleteResumeTemplate} className="delete-resume-button flex rounded" onClick={() => {
         toggleResumeTemplate(true)
         setSelected(false)}}>
-        <img className='icon' src="./public/delete-red.svg" alt="" />
+        <img className='icon' src="/delete-red.svg" alt="" />
         <p className="delete">Clear resume</p>
     </button>
     <button style={displayResumeTemplate} className="display-resume-button rounded" onClick={() =>{toggleResumeTemplate(false)
