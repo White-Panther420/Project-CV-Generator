@@ -157,7 +157,7 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
   }
 
 
-  const headerIconSrc = `./public/${title.toLocaleLowerCase().split(" ").join("-")}-black.svg`
+  const headerIconSrc = /${title.toLocaleLowerCase().split(" ").join("-")}-black.svg`
   return (
       <div className="experience-container-wrapper">
           <div style={roundedStyle} className="experience-header-div flex white-background">
@@ -166,7 +166,7 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
                 <img className="largerIcon" src={headerIconSrc} alt="" />
                 <h2>{title}</h2>
               </div>
-              <img className="icon dropdown" src="./public/dropdown-black.svg" alt="dropdown" />
+              <img className="icon dropdown" src="/dropdown-black.svg" alt="dropdown" />
             </div>
             {(isClicked && formIsActive) &&
              <Form 
@@ -202,7 +202,7 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
               })}
               <div className="add-container flex white-background">
                 <button className="display-resume-button add-button rounded flex" onClick={() =>{displayForm(); setAddForm(true);}}>
-                  <img className="icon" src="./public/add-black.svg" alt="plus" />
+                  <img className="icon" src="/add-black.svg" alt="plus" />
                   <p>{title}</p>
                 </button>
               </div>
@@ -222,7 +222,7 @@ function ExperienceCard({experienceName="", experienceObject, showEditForm, chan
     showEditForm()
   }
 
-  const iconSrc = experienceObject.visibility ? "./public/visible-black.svg" : "./public/hidden-black.svg"
+  const iconSrc = experienceObject.visibility ? "/visible-black.svg" : "/hidden-black.svg"
 
   return (
       <div className="experience-card flex white-background" onClick={displayEditForm}>
@@ -327,7 +327,7 @@ function Form({listOfFields="", onHideForm, currEditedExperience, experienceType
             )}
           <div className="form-action-buttons-container flex">
             <button className="delete-resume-button delete-form-button flex rounded" onClick={deleteExperienceObject}>
-              <img className='icon' src="./public/delete-red.svg" alt="" />
+              <img className='icon' src="/delete-red.svg" alt="" />
               <p className="delete">Delete</p>
             </button>
             <div className="delete-and-save-div flex">
