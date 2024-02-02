@@ -157,7 +157,7 @@ function ExperienceContainer({title="education", experienceObjectList=[], update
   }
 
 
-  const headerIconSrc = ./${title.toLocaleLowerCase().split(" ").join("-")}-black.svg`
+  const headerIconSrc = `./${title.toLocaleLowerCase().split(" ").join("-")}-black.svg`
   return (
       <div className="experience-container-wrapper">
           <div style={roundedStyle} className="experience-header-div flex white-background">
